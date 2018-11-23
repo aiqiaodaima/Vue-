@@ -14,8 +14,8 @@
     </mu-container>
     <div>
       <van-cell title="个人信息" is-link icon="location" to="person2" />
-      <van-cell title="邀请医生" is-link value="" icon="location" to="index" />
-      <van-cell title="我的钱包" is-link value="" icon="location" to="index" />
+      <van-cell title="邀请医生" is-link value="" icon="location" to="invite" />
+      <van-cell title="我的钱包" is-link value="" icon="location" to="wallet" />
       <van-cell title="设置" is-link value="" icon="location" to="index" />
 
     </div>

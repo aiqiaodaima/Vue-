@@ -7,8 +7,13 @@ import Register2 from '@/components/login/Register2'
 import Register3 from '@/components/login/Register3'
 import City from '@/components/base/city'
 import Home from '@/components/home/home'
+// 个人
 import Person from '@/components/person/index'
 import Person2 from '@/components/person/index2'
+import Invite from '@/components/person/invite'
+import Wallet from '@/components/person/wallet'
+import Kiting from '@/components/person/kiting'
+import Detail from '@/components/person/detail'
 Vue.use(Router)
 
 export default new Router({
@@ -56,6 +61,26 @@ export default new Router({
       path: "/person2",
       name: "person2",
       component: Person2
+    },
+    {
+      path: "/invite",
+      name: "invite",
+      component: Invite
+    },
+    {
+      path: "/wallet",
+      name: "wallet",
+      component: Wallet
+    },
+    {
+      path: "/kiting",
+      name: "kiting",
+      component: Kiting
+    },
+    {
+      path: "/detail",
+      name: "detail",
+      component: Detail
     },
 
   ],
