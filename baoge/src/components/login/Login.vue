@@ -24,6 +24,7 @@
           <router-link to="/register" class="forgetP">注册账号</router-link>
         </div>
         <el-form-item label="">
+          <!-- <el-button type="primary" :loading="loading" @click.native.prevent="doLogin">登录</el-button> -->
           <el-button type="primary" :loading="loading" @click.native.prevent="doLogin">登录</el-button>
         </el-form-item>
       </el-form>
@@ -79,14 +80,15 @@ export default {
       }
     },
     doLogin() {
-      this.$refs.loginForm.validate(valid => {
-        if (valid) {
-          this.loading = true;
-          // 这里写请求
-        } else {
-          return false;
-        }
-      });
+      // this.$refs.loginForm.validate(valid => {
+      //   if (valid) {
+      //     this.loading = true;
+      //     // 这里写请求
+      //   } else {
+      //     return false;
+      //   }
+      // });
+      this.$router.push({ path: "/home" });
     }
   }
 };
@@ -139,7 +141,7 @@ body {
 }
 .login-title {
   height: 60px;
-  padding: 30px;
+  // padding: 30px;
   color: #409eff;
   font-weight: bold;
   h1 {

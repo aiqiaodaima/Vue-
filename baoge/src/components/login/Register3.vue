@@ -1,139 +1,99 @@
 <template>
-  <div class="bg-login">
-    <div class="middle-box container">
-      <div class="login-top">注册账户</div>
-      <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2" class="demo-ruleForm">
-        <el-form-item prop="phone">
-          <el-input status-icon prefix-icon="fa fa-user" type="tel" v-model="ruleForm2.phone" autocomplete="off" placeholder="请输入手机号"></el-input>
-        </el-form-item>
-        <el-form-item prop="authCode">
-          <el-input status-icon prefix-icon="fa fa-envelope-open" v-model="ruleForm2.authCode" autocomplete="off" placeholder="请输入验证码">
-            <el-button slot="append">发送验证码</el-button>
-          </el-input>
-        </el-form-item>
-        <el-form-item prop="pass">
-          <el-input type="password" prefix-icon="fa fa-lock" v-model="ruleForm2.pass" autocomplete="off" placeholder="请输入密码"></el-input>
-        </el-form-item>
-        <el-form-item prop="checkPass">
-          <el-input type="password" prefix-icon="fa fa-lock" v-model="ruleForm2.checkPass" autocomplete="off" placeholder="请确认密码"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="submitForm('ruleForm2')" class="maxBtn">下一步</el-button>
-          <!-- <el-button @click="resetForm('ruleForm2')">重置</el-button> -->
-        </el-form-item>
-      </el-form>
-    </div>
-    <!-- <register2 /> -->
+  <div class="bg-content">
+    <p class="content-header">请填写您的真实信息用于医生认证，我们将严格保密</p>
+    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="demo-ruleForm" size="mini">
+      <p class="form-header">上传照片(2选1)</p>
+      <el-form-item label="类型" required>
+        <el-radio-group v-model="ruleForm.uptype">
+          <el-radio border label="医师执业证书"></el-radio>
+          <el-radio border label="工牌照片"></el-radio>
+        </el-radio-group>
+      </el-form-item>
+
+      <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+        <i class="el-icon-plus"></i>
+      </el-upload>
+      <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="dialogImageUrl" alt="">
+      </el-dialog>
+      <!-- </el-form-item>
+
+      <el-button type="primary" size="medium" class="maxBtn">下一步</el-button>
+      <el-form-item> -->
+      <el-button type="primary" size="medium" class="maxBtn">下一步</el-button>
+    </el-form>
+
   </div>
 </template>
 <script>
-import Vue from "vue";
-import register2 from "../login/Register2";
-Vue.component("register2", register2);
 export default {
-  name: "login",
   data() {
-    var validatephone = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入手机号"));
-      } else if (!/^1[34578]\d{9}$/.test(value)) {
-        callback(new Error("手机号格式不正确!"));
-      } else {
-        callback();
-      }
-    };
-    var validateauthCode = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入验证码"));
-      } else if (!/^\d{6}$/.test(value)) {
-        callback(new Error("验证码格式不正确!"));
-      } else {
-        callback();
-      }
-    };
-    var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.ruleForm2.checkPass !== "") {
-          this.$refs.ruleForm2.validateField("checkPass");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm2.pass) {
-        callback(new Error("两次输入密码不一致!"));
-      } else {
-        callback();
-      }
-    };
-
     return {
-      ruleForm2: {
-        phone: "",
-        authCode: "",
-        pass: "",
-        checkPass: ""
+      dialogImageUrl: "",
+      dialogVisible: false,
+      ruleForm: {
+        uptype: ""
       },
-      rules2: {
-        phone: [{ validator: validatephone, trigger: "blur" }],
-        authCode: [{ validator: validateauthCode, trigger: "blur" }],
-        pass: [{ validator: validatePass, trigger: "blur" }],
-        checkPass: [{ validator: validatePass2, trigger: "blur" }]
-      },
-      loading: false,
-      passwordType: "password",
-      eyeStatus: "",
-      checked: true
+      rules: {}
     };
   },
   methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert("submit!");
-          // 这里成功提交信息
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+    onRead(file) {
+      console.log(file);
     },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
     }
   }
 };
 </script>
-<style lang="scss" scoped>
-.bg-login {
-  width: 100vw;
-  height: 90vh;
-  background-color: #f4f6f8;
-  padding-top: 10vh;
-  .middle-box {
-    padding: 10px 0.5rem;
-    max-width: 8rem;
-    box-shadow: 0 0 10px #fff;
+<style lang="less" scoped>
+.el-upload-list--picture-card .el-upload-list__item {
+  width: 120px !important;
+  height: 120px;
+}
+.bg-content {
+  background: #f4f6f8;
+  overflow: auto;
+  .el-upload-list--picture-card .el-upload-list__item {
+    width: 40vw;
+    height: 40vw;
+  }
+  .el-upload-list__item .is-success {
+    width: 40vw;
+    height: 40vw;
+  }
+  .content-header {
+    font-size: 12px;
+    text-align: center;
+    line-height: 20px;
+  }
+  .demo-ruleForm {
+    background: #fff;
+    padding: 0.2rem 0.5rem;
     // border: 1px solid #eaeaea;
-    margin: 0 auto;
-    .login-top {
-      color: #409eff;
-      padding: 20px 0;
-      width: 100%;
-      text-align: center;
-      font-size: 32px;
+    .form-header {
+      border-left: 2px solid rgb(25, 158, 216);
+      padding: 0 8px;
+      font-size: 14px;
     }
-    .demo-ruleForm {
-      .maxBtn {
-        margin-top: 3rem;
-        width: 100%;
-      }
+    .el-form-item {
+      padding-bottom: 10px;
+      // border-bottom: 1px solid #eaeaea;
+    }
+    .el-select {
+      display: block;
+    }
+    .maxBtn {
+      margin-top: 1rem;
+      width: 100%;
     }
   }
 }
 </style>
+
 

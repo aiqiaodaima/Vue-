@@ -7,6 +7,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 import 'font-awesome/css/font-awesome.css'
 import 'lib-flexible/flexible.js'
 import routers from './router/index'
+// import Vue from 'vue';
+import Vant from 'vant';
+import 'vant/lib/index.css';
+import MuseUI from 'muse-ui';
+import 'muse-ui/dist/muse-ui.css';
+
+Vue.use(MuseUI);
+Vue.use(Vant);
 import {
   provinceAndCityData,
   regionData,
