@@ -14,6 +14,16 @@ import Invite from '@/components/person/invite'
 import Wallet from '@/components/person/wallet'
 import Kiting from '@/components/person/kiting'
 import Detail from '@/components/person/detail'
+
+//  双向转诊
+import TransferApply from '@/components/home/bothway/TransferApply'
+import MbTransferOut from '@/components/home/bothway/MbTransferOut'
+import MbTransferIn from '@/components/home/bothway/MbTransferIn'
+// 远程会诊
+import MbConsultationApply from '@/components/home/telemedicine/MbConsultationApply'
+// 远程培训
+import Teaching from '@/components/home/trainning/Teaching'
+import MbRemoteTraningDetails from '@/components/home/trainning/MbRemoteTraningDetails'
 Vue.use(Router)
 
 export default new Router({
@@ -82,6 +92,37 @@ export default new Router({
       name: "detail",
       component: Detail
     },
+    {
+      path: "/transferApply",
+      name: "TransferApply",
+      component: TransferApply
+    },
+    {
+      path: "/mbTransferOut",
+      name: "MbTransferOut",
+      component: MbTransferOut
+    },
+    {
+      path: "/mbConsultationApply",
+      name: "MbConsultationApply",
+      component: MbConsultationApply
+    },
+    {
+      path: "/teaching",
+      name: "Teaching",
+      component: Teaching
+    },
+    {
+      path: "/mbRemoteTraningDetails",
+      name: "MbRemoteTraningDetails",
+      component: MbRemoteTraningDetails
+    },
+    {
+      path: "/mbTransferIn",
+      name: "MbTransferIn",
+      component: MbTransferIn
+    },
+
 
   ],
   mode: 'history'

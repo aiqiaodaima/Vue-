@@ -21,9 +21,77 @@
             <span class="tips"> {{normal.value2}}</span>
           </div>
         </mu-col>
-
       </mu-row>
     </mu-container>
+    <mu-paper :z-depth="1" class="demo-list-wrap">
+      <mu-list textline="three-line">
+        <mu-sub-header>Today</mu-sub-header>
+        <mu-list-item avatar button :ripple="false">
+          <mu-list-item-action>
+            <mu-avatar>
+              <!-- <img src="../../assets/images/avatar1.jpg"> -->
+            </mu-avatar>
+          </mu-list-item-action>
+          <mu-list-item-content>
+            <mu-list-item-title>张三丰</mu-list-item-title>
+            <mu-list-item-sub-title>
+              <span style="color: rgba(0, 0, 0, .87)">双向转诊-</span><br />
+              今天13:37
+            </mu-list-item-sub-title>
+          </mu-list-item-content>
+
+          <mu-list-item-action>
+            <mu-list-item-after-text>￥300</mu-list-item-after-text>
+          </mu-list-item-action>
+        </mu-list-item>
+        <mu-list-item avatar button :ripple="false">
+          <mu-list-item-action>
+            <mu-avatar>
+              <!-- <img src="../../assets/images/avatar2.jpg"> -->
+            </mu-avatar>
+          </mu-list-item-action>
+          <mu-list-item-title>Maco Mai</mu-list-item-title>
+          <mu-list-item-action>
+            <mu-icon value="chat_bubble"></mu-icon>
+          </mu-list-item-action>
+        </mu-list-item>
+        <mu-list-item avatar button :ripple="false">
+          <mu-list-item-action>
+            <mu-avatar>
+              <!-- <img src="../../assets/images/avatar3.jpg"> -->
+            </mu-avatar>
+          </mu-list-item-action>
+          <mu-list-item-title>Alex Qin</mu-list-item-title>
+          <mu-list-item-action>
+            <mu-icon value="chat_bubble"></mu-icon>
+          </mu-list-item-action>
+        </mu-list-item>
+        <mu-list-item avatar button :ripple="false">
+          <mu-list-item-action>
+            <mu-avatar>
+              <!-- <img src="../../assets/images/avatar4.jpg"> -->
+            </mu-avatar>
+          </mu-list-item-action>
+          <mu-list-item-title>Allen Qun</mu-list-item-title>
+          <mu-list-item-action>
+            <mu-icon value="chat_bubble"></mu-icon>
+          </mu-list-item-action>
+        </mu-list-item>
+        <mu-list-item avatar button :ripple="false">
+          <mu-list-item-action>
+            <mu-avatar>
+              <!-- <img src="../../assets/images/uicon.jpg"> -->
+            </mu-avatar>
+          </mu-list-item-action>
+          <mu-list-item-title>Myron Liu</mu-list-item-title>
+          <mu-list-item-action>
+            <mu-icon value="chat_bubble"></mu-icon>
+          </mu-list-item-action>
+        </mu-list-item>
+      </mu-list>
+      <!-- <mu-divider></mu-divider> -->
+
+    </mu-paper>
   </div>
 </template>
 <script>
@@ -89,7 +157,11 @@ input {
 .demo-container.is-stripe .col:nth-child(2n) .grid-cell {
   background: rgba(0, 0, 0, 0.54);
 }
-
+.demo-list-wrap {
+  width: 100%;
+  margin-top: 10px;
+  // max-width: 360px;
+}
 /deep/ .mu-text-field-input {
   text-align: center;
 }
