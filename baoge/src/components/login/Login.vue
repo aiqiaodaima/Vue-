@@ -8,8 +8,8 @@
         <h1>用户登录</h1>
       </div>
       <el-form inline-message :model="loginForm" :rules="loginRules" ref="loginForm">
-        <el-form-item prop="username">
-          <el-input status-icon prefix-icon="fa fa-user" v-model="loginForm.username" placeholder="请输入用户手机号"></el-input>
+        <el-form-item prop="phone">
+          <el-input status-icon prefix-icon="fa fa-user" v-model="loginForm.phone" placeholder="请输入用户手机号" @change="getRid"></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input prefix-icon="fa fa-lock" :type="passwordType" @keyup.enter.native="doLogin" v-model="loginForm.password" placeholder="请输入密码" auto-complete="on">
@@ -48,25 +48,30 @@ export default {
       if (value === "") {
         callback(new Error("请输入密码"));
       } else {
-        // if (this.ruleForm2.checkPass !== "") {
-        //   this.$refs.ruleForm2.validateField("checkPass");
-        // }
         callback();
       }
     };
     return {
       loginForm: {
-        username: "",
-        password: ""
+        phone: "",
+        password: "",
+        rid:""
       },
       loginRules: {
-        username: [{ validator: validatephone, trigger: "blur" }],
+        phone: [{ validator: validatephone, trigger: "blur" }],
         password: [{ validator: validatePass, trigger: "blur" }]
       },
       loading: false,
       passwordType: "password",
       eyeStatus: "",
-      checked: true
+      checked: true,
+      errorInfos: {
+				2: '你输入的密码不正确，请重新输入。',
+				4: '系统出现异常，请联系管理员。',
+				6: '你输入的帐号不正确，请重新输入。',
+				8: '你的帐号正在审核中，暂时不能登录。',
+				12: '你登录的帐号类型不存在此帐号。'
+			}
     };
   },
   methods: {
@@ -79,16 +84,47 @@ export default {
         this.eyeStatus = "";
       }
     },
+    getRid(){
+      this.$post('/register/selectPhoneRid',{phone:this.loginForm.phone})
+      .then(res=>{
+        console.log(res)
+        if(res.msg == "1003"){
+          this.$message({
+            message: '该账号尚未注册',
+            type: 'warning'
+          });
+        }else{
+          this.loginForm.rid = res.msg
+        }
+      })
+    },
     doLogin() {
-      // this.$refs.loginForm.validate(valid => {
-      //   if (valid) {
-      //     this.loading = true;
-      //     // 这里写请求
-      //   } else {
-      //     return false;
-      //   }
-      // });
-      this.$router.push({ path: "/home" });
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true;
+          // 这里写请求
+          if(this.loginForm.rid){
+            this.$post("/shiro/loginUser",this.loginForm)
+            .then(res=>{
+              console.log(res)
+              if(res.msg == '1'){
+                this.$router.push({ path: "/home" });
+                sessionStorage.setItem("user",JSON.stringify(res.user))
+              }
+              else{
+                this.$message.error(this.errorInfos[res.data.msg] || '系统异常');
+                this.loading = false;
+              }
+            })
+            .catch()
+          }else{
+             this.loading = false;
+          }
+        } else {
+          return false;
+        }
+      });
+
     }
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <div class="contain">
-    <center>转入列表</center>
+    <center>转出列表</center>
     <el-card class="box-card" v-for="i in 5" :key="i">
       <div class="top">
         <span>皮银珍 </span>

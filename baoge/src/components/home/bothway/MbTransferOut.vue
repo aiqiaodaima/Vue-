@@ -1,25 +1,33 @@
 <template>
   <div class="contain">
     <center>转出列表</center>
-    <el-card class="box-card" v-for="i in 5">
+    <el-card class="box-card" v-for="item in tableData" :key="item.id">
       <div class="top">
-        <span>皮银珍 </span>
-        <span>主任医师</span>
-        <span>内分泌科</span>
-        <el-button style="float: right; padding: 3px 0" type="text" @click="detail">查看详情</el-button>
+        <span>患者姓名：{{item.ptName}} </span>
+        <span>性别： {{item.ptSex}}</span>
+        <span>年龄： {{item.ptAge}}</span>
+        <el-button style="float: right; padding: 3px 0" type="text" @click="handleCheck(item.id)">查看详情</el-button>
       </div>
       <div class="item">
-        <span>联系方式：15918727869 </span>
+        <span>联系方式：{{item.ptPhone}} </span>
       </div>
       <div class="item">
-        <span>接诊医院：长沙市第一医院 </span>
-        <span>呼吸科</span>
+        <span>接诊医院：{{item.planHospital}} </span>
+        <span>{{item.planChamber}}</span>
       </div>
     </el-card>
     <!-- 底部 -->
     <div style="height:50px;"></div>
     <footer>
-      <el-pagination background layout="prev, pager, next" :total="100" page-size=5 pager-count = 5 class="page"></el-pagination>
+      <el-pagination
+      align="center"
+      background
+      @current-change="handleCurrentChange"
+      :current-page.sync="pageNo"
+      :page-size="4"
+      layout="total, prev, pager, next, jumper"
+      :total="resultCount">
+    </el-pagination>
 
     </footer>
   </div>
@@ -30,13 +38,55 @@
   export default {
     data() {
       return {
-
+        tableData: [],
+        ptName:'',
+        daterange:[],
+        startTime: '',
+        endTime: '',
+        pageNo: 1,
+        resultCount:0,
+        applyUserId:''
       }
     },
-    methods: {
-      detail() {
-
-      }
+    methods:{
+      handleSelect(){
+        this.pageNo = 1
+        this.fetchData()
+      },
+      fetchData(){
+        this.$post
+        ('case/selectCasePage?pageSize=4&type=A&pageNo='+this.pageNo +
+              '&applyUserId=' + this.applyUserId +
+              '&startTime=' + this.startTime +
+              '&endTime=' + this.endTime +
+              '&ptName=' + this.ptName)
+        .then(res=>res.list)
+        .then(res=>{
+          this.resultCount = res.resultCount
+          // console.log(res);
+          this.tableData = res.list.map(item=>{
+            item.planTime =  this.$moment(item.planTime).format("YYYY-MM-DD")
+            // item.statu = this.$statuChange(item.statu)
+            return item
+          })
+        })
+      },
+      handleCurrentChange(e){
+        this.pageNo = e
+        this.fetchData();
+      },
+      handleCheck(data){
+        this.$router.push({
+          path: '/docTransferOutDetails',
+          query:{
+            id: data
+          }
+        })
+      },
+    },
+    mounted(){
+      this.applyUserId =  JSON.parse(sessionStorage.getItem('user')).id
+      this.fetchData()
     },
   }
 

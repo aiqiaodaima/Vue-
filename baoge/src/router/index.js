@@ -19,11 +19,14 @@ import Detail from '@/components/person/detail'
 import TransferApply from '@/components/home/bothway/TransferApply'
 import MbTransferOut from '@/components/home/bothway/MbTransferOut'
 import MbTransferIn from '@/components/home/bothway/MbTransferIn'
+import DocTransferOutDetails from '@/components/home/bothway/DocTransferOutDetails'
 // 远程会诊
 import MbConsultationApply from '@/components/home/telemedicine/MbConsultationApply'
+import ConsultationList from '@/components/home/telemedicine/ConsultationList'
 // 远程培训
 import Teaching from '@/components/home/trainning/Teaching'
 import MbRemoteTraningDetails from '@/components/home/trainning/MbRemoteTraningDetails'
+import Guide from '@/components/home/trainning/Guide'
 Vue.use(Router)
 
 export default new Router({
@@ -122,8 +125,21 @@ export default new Router({
       name: "MbTransferIn",
       component: MbTransferIn
     },
-
-
+    {
+      path: "/consultationList",
+      name: "ConsultationList",
+      component: ConsultationList
+    },
+    {
+      path: "/guide",
+      name: "Guide",
+      component: Guide
+    },
+    {
+      path: "/docTransferOutDetails",
+      name: "DocTransferOutDetails",
+      component: DocTransferOutDetails
+    },
   ],
-  mode: 'history'
+  // mode: 'history'
 })

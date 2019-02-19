@@ -6,23 +6,6 @@
       </van-swipe-item>
     </van-swipe>
     <div>
-      <p class="headerp">医生列表 </p>
-      <van-row type="flex">
-        <van-col span="6">
-          <van-icon name="records" />
-          <span>审核列表</span>
-        </van-col>
-        <van-col span="6">
-          <van-icon name="records" />
-          <span>医生列表</span>
-        </van-col>
-        <van-col span="6">
-          <van-icon name="records" />
-          <span>黑名单</span>
-        </van-col>
-      </van-row>
-    </div>
-    <div>
       <p class="headerp">双向转诊 </p>
       <van-row type="flex">
         <van-col span="6">
@@ -47,8 +30,8 @@
           <span  @click="telApply">会诊申请</span>
         </van-col>
         <van-col span="6">
-          <van-icon name="records" />
-          <span>会诊列表</span>
+          <van-icon @click="consultationList" name="records" />
+          <span @click="consultationList">会诊列表</span>
         </van-col>
       </van-row>
     </div>
@@ -64,8 +47,8 @@
           <span>健康讲座</span>
         </van-col>
         <van-col span="6">
-          <van-icon name="records" />
-          <span>诊疗指南</span>
+          <van-icon  @click="guide" name="records" />
+          <span  @click="guide">诊疗指南</span>
         </van-col>
       </van-row>
     </div>
@@ -113,6 +96,12 @@
       },
       teaching(){
         this.$router.push("teaching")
+      },
+      consultationList(){
+        this.$router.push("consultationList")
+      },
+      guide(){
+        this.$router.push("guide")
       }
     },
   };

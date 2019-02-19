@@ -17,15 +17,11 @@
                 <el-input v-model="patientData.ptName"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col>
               <el-form-item label="年龄" prop="ptAge">
                 <el-input min="1" type="number" v-model.number="patientData.ptAge"></el-input>
               </el-form-item>
             </el-col>
-          </el-row>
-          <el-row>
             <el-col>
               <el-form-item label="性别" prop="ptSex">
                 <el-select style="width:100%" v-model="patientData.ptSex">
@@ -41,8 +37,6 @@
                 <el-input v-model.number="patientData.ptPhone"></el-input>
               </el-form-item>
             </el-col>
-            </el-row>
-             <el-row>
             <el-col>
               <el-form-item label="身份证" prop="ptCard">
                 <el-input v-model="patientData.ptCard"></el-input>
@@ -94,33 +88,36 @@
           </el-row>
           <el-row>
             <el-col>
-              <span>双向转诊医保优惠政策</span>
-              <p>在长沙市职工医疗保险和城乡居民保险范围内的参保人员，对按项目付费后付制结算方式管理医疗费用的，建立双向转诊“一增一减一免”制度，试行逐步提高上转患者到上级医院住院医疗费用支付标准，减去在基层医疗机构住院的起付线，免除第二次住院28天时间的限制;试行逐步提高下转患者住院医疗费用支付标准，减免在上级医院起付标准50%，免除第二次住院28天时间的限制。</p>
+              <el-form-item label-width="96px" label="双向转诊医保优惠政策">
+                在长沙市职工医疗保险和城乡居民保险范围内的参保人员，对按项目付费后付制结算方式管理医疗费用的，建立双向转诊“一增一减一免”制度，试行逐步提高上转患者到上级医院住院医疗费用支付标准，减去在基层医疗机构住院的起付线，免除第二次住院28天时间的限制;试行逐步提高下转患者住院医疗费用支付标准，减免在上级医院起付标准50%，免除第二次住院28天时间的限制。
+              </el-form-item>
             </el-col>
           </el-row>
         </el-form>
       </div>
 
-      <div style="width:100%;" v-show="activeStep==1">
+      <div v-show="activeStep==1" style="width:100%">
         <el-collapse v-model="activeName">
           <el-collapse-item v-for="item in typeList" :key="item.type" :title="item.name" :name="item.type">
-            <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
-              list-type="picture-card"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove">
-              <i class="el-icon-plus"></i>
-            </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
+            <img-upload @deleteImg="deleteSonImg($event)" @sendFatherImg="getSonImg($event)" @toFatherVue="getSonData($event)"
+              :type="item.type" :filePath="'member/twoWayReferral'"></img-upload>
           </el-collapse-item>
         </el-collapse>
       </div>
 
-      <div style="width:400px;" v-show="activeStep==2">
+      <div v-show="activeStep==2">
         <el-form status-icon ref="ruleForm2" :model="doctorData" :rules="formRules2" label-position="left" label-width="132px"
           size="small" label-suffix="：">
+          <!-- <el-form-item label="申请医生科室" prop="chamber">
+            <el-select @change="getDoctor" style="width:100%" v-model="doctorData.chamber">
+              <el-option v-for="(item, index) in sectionList" :key="index" :label="item.seName" :value="item.seName"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="申请医生姓名" prop="applyName">
+            <el-select @change="getApplyDocId" style="width:100%" v-model="doctorData.applyName">
+              <el-option v-for="(item, index) in doctorList" :key="index" :label="item.userName" :value="item.userName"></el-option>
+            </el-select>
+          </el-form-item> -->
           <el-form-item label="转往医院" prop="planHospitalId">
             <!-- <el-input disabled v-model="doctorData.planHospitalId"></el-input> -->
             <el-select style="width:100%" v-model="doctorData.planHospitalId">
@@ -178,7 +175,11 @@
 </template>
 
 <script>
+  import ImgUpload from '../../public/ImgUpload'
   export default {
+    components: {
+      'img-upload': ImgUpload
+    },
     data() {
       let checkPhone = (rule, value, callback) => {
         if (!value) {
@@ -344,10 +345,9 @@
 
         // 发送短信
         applyUserId: '',
-        applyUserPhone: '', // 申请人手机号码，用来发送短信
         hospitalId: '',
         hospitalName: '',
-        principalId: '', //管理医院责任人
+        principalId: '379', //管理医院责任人
 
         typeList: [{
             type: 1,
@@ -387,10 +387,15 @@
       }
     },
     mounted() {
-      let infor = JSON.parse(sessionStorage.getItem('accountInfo') || '{"infor":{}}').infor
-      this.hospitalId = infor.id
+      let infor = JSON.parse(sessionStorage.getItem('user') || '{"infor":{}}')
+      console.log(infor)
+      this.hospitalId = infor.hospitalId
       this.hospitalName = infor.hospitalName
-      this.principalId = infor.principalId
+      // this.principalId = infor.principalId
+      this.doctorData.chamber = infor.seName
+      this.doctorData.applyName = infor.userName
+      this.doctorData.applyJob = infor.job
+      this.applyUserId = infor.id
       this.fetchSection()
     },
     watch: {
@@ -404,23 +409,20 @@
       // 获医院科室
       fetchSection() {
         // 本医院
-        this.$axios
-          .post("section/selectSectionById?hospitalId=" + this.hospitalId)
+        this.$post("section/selectSectionById?hospitalId=" + this.hospitalId)
           .then(res => {
             // console.log(res);
-            this.sectionList = res.data.stList
+            this.sectionList = res.stList
           });
         // 管理医院
-        this.$axios
-          .post("section/selectSectionById?hospitalId=10001")
+        this.$post("section/selectSectionById?hospitalId=10001")
           .then(res => {
             // console.log(res)
-            this.planSectionList = res.data.stList
+            this.planSectionList = res.stList
           })
       },
       getDoctor(e) {
-        this.$axios
-          .post("user/selectUserBySeName?rid=7&hospitalId=" + this.hospitalId + "&seName=" + e)
+        this.$post("user/selectUserBySeName?rid=7&hospitalId=" + this.hospitalId + "&seName=" + e)
           .then(res => {
             console.log(res)
             if (this.doctorData.applyName) {
@@ -429,27 +431,9 @@
             this.doctorList = res.data.userList
           })
       },
-      getApplyDocId(e) {
-        console.log(e);
-        let result = this.doctorList.find(item => {
-          if (item.userName == e) {
-            return item
-          }
-        })
-        this.applyUserId = result.id
-        this.applyUserPhone = result.phone
-        // console.log(this.applyUserPhone)
-      },
-      handleRemove(file, fileList) {
-        console.log(file, fileList);
-      },
-      handlePictureCardPreview(file) {
-        this.dialogImageUrl = file.url;
-        this.dialogVisible = true;
-      },
       // 下一步
       nextStepOne(formName) {
-        this.activeStep = 1
+         this.activeStep = 1
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // alert('submit!');
@@ -457,7 +441,7 @@
           } else {
             // console.log('error submit!!');
             // this.activeStep = 1
-            // return false;
+            return false;
           }
         });
       },
@@ -478,30 +462,26 @@
             let obj = Object.assign({}, this.patientData, this.doctorData, aciObj, hsta)
             acList.push(obj)
             // alert('submit!');
-            this.$axios.post('case/insertCase', acList, {
+            this.$post('case/insertCase', acList, {
               headers: {
                 'Content-Type': 'application/json;charset=UTF-8'
               }
             }).then(res => {
               console.log(res)
-              if (res.data.msg === '1') {
-                // this.$message({
-                //   message: '转诊申请成功！',
-                //   type: 'success'
-                // })
-                // 发送短信
-                let option = {
-                  patientName: this.patientData.ptName,
-                  patientPhone: this.patientData.ptPhone,
-                  applyName: this.doctorData.applyName,
-                  hospitalName: this.hospitalName,
-                  principalId: this.principalId
-                }
-                this.$axios.post('send/sendTransfer', option)
-                  .then(res => {
-                    console.log(res)
-                    this.adVisible = true
-                  })
+              if (res.msg === '1') {
+                this.$router.push('mbTransferOut')
+                // let option = {
+                //   patientName: this.patientData.ptName,
+                //   patientPhone: this.patientData.ptPhone,
+                //   applyName: this.doctorData.applyName,
+                //   hospitalName: this.hospitalName,
+                //   principalId: this.principalId
+                // }
+                // this.$post('send/sendTransfer', option)
+                //   .then(res => {
+                //     console.log(res)
+                //     this.adVisible = true
+                //   })
               } else {
                 this.isDisable = false
                 this.$message.error('转诊申请失败！')

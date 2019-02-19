@@ -3,12 +3,12 @@
     <mu-container style="padding: 16px 0;border-bottom:2px solid #eaeaea;">
       <mu-row class="photo-div">
         <mu-avatar :size="size">
-          <!-- <img src="../../assets/images/uicon.jpg"> -->
+          <img :src="$oss+user.photo">
         </mu-avatar>
         <div class="doctor-div">
-          <p><span>张丽</span></p>
-          <p><span>主任医师</span><span>呼吸科</span></p>
-          <p><span>广东省 人民医院</span></p>
+          <p><span>{{user.userName}}</span></p>
+          <p><span style="margin-right:5px;">{{user.job}}</span><span>{{user.seName}}</span></p>
+          <p><span>{{user.hospitalName}}</span></p>
         </div>
       </mu-row>
     </mu-container>
@@ -34,8 +34,12 @@ export default {
   data() {
     return {
       shift: "person",
-      size: 100
+      size: 100,
+      user:{}
     };
+  },
+  created(){
+    this.user = JSON.parse(sessionStorage.user);
   }
 };
 </script>

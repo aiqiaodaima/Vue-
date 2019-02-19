@@ -12,7 +12,18 @@ import Vant from 'vant';
 import 'vant/lib/index.css';
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
-
+// axios
+import axios from 'axios'
+import {post,fetch,patch,put} from './http'
+// 日期
+import Moment from 'moment'
+Vue.prototype.$moment = Moment;
+//定义全局变量
+Vue.prototype.$post=post;
+Vue.prototype.$fetch=fetch;
+Vue.prototype.$patch=patch;
+Vue.prototype.$put=put;
+Vue.prototype.$oss = 'https://imuts.oss-cn-shenzhen.aliyuncs.com/'
 Vue.use(MuseUI);
 Vue.use(Vant);
 import {
@@ -23,30 +34,8 @@ import {
   CodeToText,
   TextToCode
 } from 'element-china-area-data'
-
-
 Vue.config.productionTip = false
-// 全局注册组件
-// Vue.component(
-//   "users", User
-// )
 Vue.use(ElementUI);
-
-// 组件路由
-// Vue.use(VueRouter);
-
-// const routes = [{
-//   path: "/",
-//   component: Login
-// }, {
-//   path: "/user",
-//   component: User
-// }]
-
-// const router = new VueRouter({
-//   routes,
-//   mode: 'history'
-// })
 new Vue({
   el: '#app',
   router: routers,
@@ -54,5 +43,4 @@ new Vue({
     App
   },
   template: '<App/>'
-
 })
