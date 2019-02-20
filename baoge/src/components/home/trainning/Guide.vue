@@ -1,26 +1,19 @@
 <template>
   <div class="contain">
-    <center>转出列表</center>
-    <el-card class="box-card" v-for="i in 5" :key="i">
+    <center>诊疗指南</center>
+    <el-card class="box-card" v-for="item in tableData" :key="item.id">
       <div class="top">
-        <span>皮银珍 </span>
-        <span>主任医师</span>
-        <span>内分泌科</span>
-        <el-button style="float: right; padding: 3px 0" type="text" @click="detail">查看详情</el-button>
+        <span>{{item.cgName}} </span>
       </div>
       <div class="item">
-        <span>联系方式：15918727869 </span>
-      </div>
-      <div class="item">
-        <span>接诊医院：长沙市第一医院 </span>
-        <span>呼吸科</span>
+        <el-button style="float: right; padding: 0 0 13px" type="text" @click="detail">查看详情</el-button>
       </div>
     </el-card>
     <!-- 底部 -->
     <div style="height:50px;"></div>
     <footer>
-      <el-pagination align="right" background @current-change="handleCurrentChange" :current-page.sync="currentPage"
-      :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
+      <el-pagination align="center" small background @current-change="handleCurrentChange" :current-page.sync="currentPage"
+      :page-size="pageSize" layout="total, prev, pager, next" :total="total" :pager-count=5>
     </el-pagination>
 
     </footer>
@@ -43,6 +36,9 @@
         startTime: "",
         endTime: "",
       }
+    },
+    mounted(){
+      this.selectTrainingRecordPage()
     },
     methods: {
       detail() {
