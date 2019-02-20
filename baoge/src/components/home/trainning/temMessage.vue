@@ -14,7 +14,7 @@
           <div class="OwO-body">
             <ul class="OwO-items OwO-items-show">
               <li class="OwO-item" v-for="(oitem,index) in OwOlist" :key="'oitem'+index" @click="choseEmoji(oitem.title)">
-                <img :src="'static/img/emot/image/'+oitem.url" alt="">
+                <img :src="'static/emot/image/'+oitem.url" alt="">
               </li>
             </ul>
             <div class="OwO-bar">
@@ -89,8 +89,8 @@
       </div>
     </div>
     <!-- {{user}} -->
-    <el-pagination align="right" background @current-change="handleCurrentChange" :current-page.sync="pageNo"
-      :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
+    <el-pagination align="center" small background @current-change="handleCurrentChange" :current-page.sync="pageNo"
+      :page-size="pageSize" layout="total, prev, pager, next" :total="total" :pager-count=5>
     </el-pagination>
   </div>
 </template>
@@ -102,7 +102,7 @@
         user:{},
         title:"提问",
         total: 0, //评论总数
-        pageSize: 6,
+        pageSize: 5,
         ask:"提交",
         pageNo: 1,
         msg: [], // 评论列表
@@ -409,8 +409,7 @@
             'url': 'fahongbao.gif'
           }
         ],
-        // photo: require( '../../../../assets/images/photo.png') ,
-        photo:"",
+        photo: require('../../../assets/photo.png'),
         opinion: {
           content: '',
           trainingId: '',
@@ -440,7 +439,7 @@
                 break;
               }
             }
-            str = str.replace(pattern2, '<img src="static/img/emot/image/' + src + '"/>');
+            str = str.replace(pattern2, '<img src="static/emot/image/' + src + '"/>');
           }
         }
         return str;
@@ -461,26 +460,23 @@
           return;
         }
         this.opinion.content = this.textarea
-        this.$axios.post('training/addTrainingOpinion', this.opinion)
+        this.$post('training/addTrainingOpinion', this.opinion)
           .then(res => {
             console.log(res)
-            let _this = this
-            if (res.status == 200) {
               this.$message({
                 message: '提交成功',
                 type: 'success',
                 duration: 1500,
-                onClose: function () {
-                  _this.textarea = '';
-                  _this.opinion.replyName = '';
-                  _this.opinion.replyId = '';
-                  // _this.ask = '回复'
-                  _this.pageNo = 1;
-                  _this.getMsg();
-                  _this.removeRespond()
+                onClose:()=> {
+                  this.textarea = '';
+                  this.opinion.replyName = '';
+                  this.opinion.replyId = '';
+                  this.pageNo = 1;
+                  this.getMsg();
+                  this.removeRespond()
+                  this.pBody = true;
                 }
               });
-            }
           })
       },
       respondMsg(id,huifuOrPinglun) { //回复留言
@@ -499,14 +495,13 @@
       },
 
       getUser() {
-        this.$axios
-          .post('training/selectTrainingById', {
+        this.$post('training/selectTrainingById', {
             id: this.$route.query.id
           })
           .then(res=>{
-            if(res.status == 200){
-              if(res.data.user){
-                this.user = res.data.user;
+
+              if(res.user){
+                this.user = res.user;
                 if(this.phone == this.user.phone){
                   console.log(this.user.phone)
                   this.canReply = true;
@@ -514,23 +509,23 @@
                 }
                 // console.log(this.user)
               }
-            }
+
           })
       },
       getMsg() {
-        this.$axios.post('training/selectTrainingOpinionPage', {
+        this.$post('training/selectTrainingOpinionPage', {
             trainingId: this.$route.query.id,
             pageSize: this.pageSize,
             pageNo: this.pageNo
           })
           .then(res => {
-            if (res.status == 200) {
-              this.total = res.data.customPage.records
-              if (res.data.customPage.rows.length > 0) {
-                this.msg = res.data.customPage.rows.map(item => {
+
+              this.total = res.customPage.records
+              if (res.customPage.rows.length > 0) {
+                this.msg = res.customPage.rows.map(item => {
                   item.createTime = this.$moment(item.createTime).format("YYYY-MM-DD");
                   if(item.photo){
-                    item.photo = this.$ossAssetName + item.photo
+                    item.photo = this.$oss + item.photo
                   }else{
                     item.photo = this.photo
                   }
@@ -538,7 +533,7 @@
                   return item
                 })
               }
-            }
+
           })
       },
     },
@@ -552,13 +547,9 @@
       this.getMsg()
 
       this.opinion.trainingId = this.$route.query.id
-      if(JSON.parse(sessionStorage.getItem("accountInfo")).infor){
-        this.opinion.trainingBelong = JSON.parse(sessionStorage.getItem("accountInfo")).infor.id
-        this.opinion.huifuOrPinglun = JSON.parse(sessionStorage.getItem("accountInfo")).infor.hospitalName
-      }else if(JSON.parse(sessionStorage.getItem("accountInfo")).user){
-        this.opinion.trainingBelong =  JSON.parse(sessionStorage.getItem("accountInfo")).user.id
-        this.opinion.huifuOrPinglun =  JSON.parse(sessionStorage.getItem("accountInfo")).user.userName
-        this.phone = JSON.parse(sessionStorage.getItem("accountInfo")).user.contactPhone;
+      if(JSON.parse(sessionStorage.getItem("user"))){
+        this.opinion.trainingBelong = JSON.parse(sessionStorage.getItem("user")).id
+        this.opinion.huifuOrPinglun = JSON.parse(sessionStorage.getItem("user")).hospitalName
       }
       try {
         if(sessionStorage.getItem("rid") == "1" || sessionStorage.getItem("rid") == "2"){
@@ -585,6 +576,7 @@
     padding: 15px;
     margin-bottom: 20px;
     border-radius: 5px;
+    min-height: 413px;
   }
 
   .tmsg-respond h3 {
@@ -1279,13 +1271,13 @@
   }
 
   .tmsg-c-item article header img {
-    width: 65px;
-    height: 65px;
+    width: 1.57rem;
+    height: 1.57rem;
     border-radius: 50%;
     float: left;
     transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
-    margin-right: 15px;
+    margin-right: 10px;
     object-fit: cover;
   }
 

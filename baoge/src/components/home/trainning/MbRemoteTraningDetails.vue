@@ -10,7 +10,7 @@
               </dt>
               <dd style="position: relative;">
                 <video id="remotetraining_video" class="video-js vjs-big-play-centered" style="width:90%;height: 200px;background-color: #000;"
-                  ref='video' controls="true" controlslist="nodownload" src="https://imuts.oss-cn-shenzhen.aliyuncs.com/lcsVideo/中国2型糖尿病防治指南（二）.mp4">
+                  ref='video' controls="true" controlslist="nodownload">
                   <p class="vjs-no-js">
                     要查看此视频，请启用JavaScript，并考虑将其升级到web浏览器
                   </p>
@@ -36,7 +36,7 @@
         <div style="overflow: hidden;">
           <h1 style="margin:10px 0 15px;">授课老师简介</h1>
           <div class='photo' :style="{backgroundImage: 'url(' + user.photo + ')', backgroundSize:'center'}"></div>
-          <div style="box-sizing:border-box;font-size: 18px;width: 80%;float: left;">
+          <div style="box-sizing:border-box;font-size: 18px;">
             <p style="font-size: 14px; line-height:22px">姓名：{{user.userName}}</p>
             <p style="font-size: 14px; line-height:22px">职称：{{user.job}}</p>
             <p style="font-size: 14px; line-height:22px">科室：{{user.seName}}</p>
@@ -65,7 +65,7 @@
     },
     data() {
       return {
-        videoUrl: 'https://imuts.oss-cn-shenzhen.aliyuncs.com/lcsVideo/中国2型糖尿病防治指南（二）.mp4',
+        // videoUrl: 'https://imuts.oss-cn-shenzhen.aliyuncs.com/lcsVideo/中国2型糖尿病防治指南（二）.mp4',
         title: '',
         user: {},
         ask: '提问',
@@ -92,50 +92,40 @@
         this.getMsg()
       },
       getVideo() {
-        this.$axios
-          .post('training/selectTrainingById', {
+        this.$post('training/selectTrainingById', {
             id: this.$route.query.id
           })
           .then(res => {
-            // console.log(res)
-            if (res.status == 200) {
-              if (res.data.training.url.indexOf('https') < 0) {
-                res.data.training.url = this.$ossAssetName + res.data.training.url
+            console.log(res)
+            if (res.training) {
+              if (res.training.url.indexOf('https') < 0) {
+                res.training.url = this.$oss + res.training.url
               }
-              this.$refs.video.src = res.data.training.url
-              this.title = res.data.training.title
-              if (res.data.user) {
-                res.data.user.photo = this.$ossAssetName + res.data.user.photo
-                this.user = res.data.user;
+              this.$refs.video.src = res.training.url
+              this.title = res.training.title
+              if (res.user) {
+                res.user.photo = this.$oss + res.user.photo
+                this.user = res.user;
                 console.log(this.user)
-                try {
-                  if (this.user.phone == JSON.parse(sessionStorage.getItem("accountInfo")).user.phone) {
-                    this.isSent = true
-                  }
-                  console.log(this.user.phone, JSON.parse(sessionStorage.getItem("accountInfo")).user.phone)
-                } catch (error) {
-
-                }
+                this.user.phone == JSON.parse(sessionStorage.getItem("user")).phone
               }
               this.$refs.video.onplay = this.videoPlay
             }
           })
       },
       getMsg() {
-        this.$axios.post('training/selectTrainingOpinionPage', {
+        this.$post('training/selectTrainingOpinionPage', {
             trainingId: this.$route.query.id,
             pageSize: this.pageSize,
             pageNo: this.pageNo
           })
           .then(res => {
-            if (res.status == 200) {
-              this.total = res.data.customPage.records
-              if (res.data.customPage.rows.length > 0) {
-                this.msg = res.data.customPage.rows.map(item => {
+              this.total = res.customPage.records
+              if (res.customPage.rows.length > 0) {
+                this.msg = res.customPage.rows.map(item => {
                   item.createTime = this.$moment(item.createTime).format("YYYY-MM-DD");
                   return item
                 })
-              }
             }
           })
       },
@@ -151,7 +141,7 @@
           });
           return
         }
-        this.$axios.post("totalTraining/trainingFlower", {
+        this.$post("totalTraining/trainingFlower", {
             trainingId: this.$route.query.id,
             giveId: this.giveId,
             flowerNum: this.flower
@@ -176,7 +166,7 @@
           })
       },
       showMyFlowe() {
-        this.$axios.post("totalTraining/trainingFlowerBytId", {
+        this.$post("totalTraining/trainingFlowerBytId", {
             trainingId: this.$route.query.id,
             giveId: this.giveId,
           })
@@ -194,7 +184,7 @@
           })
       },
       showTotalFlowe() {
-        this.$axios.post("totalTraining/trainingFlowerTotal", {
+        this.$post("totalTraining/trainingFlowerTotal", {
             trainingId: this.$route.query.id
           })
           .then(res => {
@@ -206,7 +196,7 @@
       }
     },
     created() {
-      this.$refs.video.src = 'https://imuts.oss-cn-shenzhen.aliyuncs.com/lcsVideo/中国2型糖尿病防治指南（二）.mp4'
+      // this.$refs.video.src = 'https://imuts.oss-cn-shenzhen.aliyuncs.com/lcsVideo/中国2型糖尿病防治指南（二）.mp4'
       this.getMsg();
       this.getVideo();
       this.showMyFlowe();
@@ -217,10 +207,21 @@
 </script>
 
 <style scoped>
+/* 备用图标 */
+    [class^="my_icon"], [class*="my_icon"] {
+      font-family:"iconfont" !important;
+      font-size:16px;
+      font-style:normal;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
   .grade {
-    margin: 10px 0;
+    margin: 0 auto;
     display: flex;
     align-items: center;
+    padding: 1em;
+    justify-content: center;
   }
 
   #wrap /deep/ .el-card__body {
@@ -228,7 +229,9 @@
   }
 
   .grade /deep/ .my_icon-my_flower2:before {
+    font-family:"iconfont" !important;
     font-size: 24px !important;
+    font-style: normal;
   }
 
   .grade .tips {

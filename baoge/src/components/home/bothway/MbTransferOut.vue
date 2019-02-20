@@ -6,7 +6,6 @@
         <span>患者姓名：{{item.ptName}} </span>
         <span>性别： {{item.ptSex}}</span>
         <span>年龄： {{item.ptAge}}</span>
-        <el-button style="float: right; padding: 3px 0" type="text" @click="handleCheck(item.id)">查看详情</el-button>
       </div>
       <div class="item">
         <span>联系方式：{{item.ptPhone}} </span>
@@ -14,6 +13,9 @@
       <div class="item">
         <span>接诊医院：{{item.planHospital}} </span>
         <span>{{item.planChamber}}</span>
+      </div>
+      <div class="item">
+         <el-button style="float: right; padding: 13px 5px" type="text">查看详情</el-button>
       </div>
     </el-card>
     <!-- 底部 -->

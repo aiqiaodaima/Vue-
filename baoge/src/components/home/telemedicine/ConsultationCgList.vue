@@ -1,14 +1,13 @@
 <template>
   <div class="contain">
-    <center>离线会诊</center>
-    <el-card class="box-card" v-for="item in arrLX" :key="item.id">
+    <center>会诊列表</center>
+    <el-card class="box-card" v-for="item in arrWC" :key="item.id">
       <div class="top">
         <span>患者姓名：{{item.patientName}} </span>
         <span>性别： {{item.sex}}</span>
         <span>年龄： {{item.age}}</span>
-        <!-- <el-button style="float: right; padding: 3px 0" type="text">查看详情</el-button> -->
       </div>
-       <div class="item">
+      <div class="item">
         <span>会诊时间：{{$moment(item.groupDate).format('YYYY-MM-DD HH:mm')}} </span>
       </div>
       <div class="item">
@@ -19,7 +18,7 @@
         <span>{{item.chamber}}</span>
       </div>
       <div class="item">
-         <el-button style="float: right; padding: 13px 5px" type="text"  @click="selectConById(item.id)">查看详情</el-button>
+         <el-button style="float: right; padding: 13px 5px" type="text" @click="selectConById(item.id)">查看详情</el-button>
       </div>
     </el-card>
     <!-- 底部 -->
@@ -39,9 +38,8 @@
   export default {
     data() {
       return {
-        arrLX: [],
-        arrWC: [],
         hospital:'',
+        arrWC: [],
         currentPage: 1,
         total: 0, //总页数
         pageSize: 10, //每页大小
@@ -72,9 +70,10 @@
     },
     mounted() {
       this.docId = JSON.parse(sessionStorage.getItem('user')).id
-      this.selectConByLX()
+      this.selectConByCategory();
       this.getHospital()
     },
+
     methods: {
       // 获取医院
       getHospital(){
@@ -86,24 +85,22 @@
           }
         })
       },
-      selectConByLX() {
+      selectConByCategory() {
         this.$post(
-            "con/selectConByPage?type=1&diagnosisType=LX&pageNo=" + this.currentPage +
-            "&pageSize=" + this.pageSize +
-            "&patientName=" + this.patientName +
-            "&startTime=" + this.startTime +
-            "&endTime=" + this.endTime + "&docId=" + this.docId
-          )
-          .then(res => res.customPage)
-          .then(res => {
-            this.arrLX = res.rows;
-            this.total = res.records;
-          });
+          "con/selectConByCategory?type=3&pageNo=" + this.currentPage +
+          "&pageSize=" + this.pageSize +
+          "&patientName=" + this.patientName +
+          "&startTime=" + this.startTime +
+          "&endTime=" + this.endTime + "&docId=" + this.docId
+        ).then(res => {
+          console.log(res)
+          this.arrWC = res.pagetion.list;
+          this.total = res.pagetion.resultCount;
+        });
       },
-
       handleCurrentChange(val) {
         this.currentPage = val;
-        this.selectConByLX();
+        this.selectConByCategory();
       },
       selectConById(e) {
         this.$router.push({
@@ -122,7 +119,6 @@
           this.startTime = '';
           this.endTime = '';
         }
-
       },
       handleSelect() {
         this.selectConByCategory();

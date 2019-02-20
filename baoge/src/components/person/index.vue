@@ -23,7 +23,7 @@
     <mu-container style="max-width: 400px; width:100%;" class="footer-div">
       <mu-bottom-nav :value.sync="shift">
         <mu-bottom-nav-item value="home" title="管理中心" icon="home" to="/home"></mu-bottom-nav-item>
-        <mu-bottom-nav-item value="favorite" title="咨询" icon="favorite"></mu-bottom-nav-item>
+        <!-- <mu-bottom-nav-item value="favorite" title="咨询" icon="favorite"></mu-bottom-nav-item> -->
         <mu-bottom-nav-item value="person" title="个人中心" icon="person" to="/person"></mu-bottom-nav-item>
       </mu-bottom-nav>
     </mu-container>

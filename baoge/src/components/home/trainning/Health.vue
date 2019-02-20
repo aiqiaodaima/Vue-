@@ -1,6 +1,6 @@
 <template>
   <div class="contain">
-    <center>教学培训</center>
+    <center>健康讲座</center>
     <el-card class="box-card" v-for="item in tableData" :key="item.id" style="margin-bottom:10px;">
       <div class="top">
         <span style="font-size:16px;">{{item.title}}</span>
@@ -35,7 +35,7 @@
         currentPage: 1,
         total: 0, //总页数
         pageSize: 5, //每页大小
-        type: 1,
+        type: 2,
         currentVal:'教学培训',
         changshaName:'',
         hospitalId:""

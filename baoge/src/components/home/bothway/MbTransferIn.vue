@@ -6,7 +6,6 @@
         <span>皮银珍 </span>
         <span>主任医师</span>
         <span>内分泌科</span>
-        <el-button style="float: right; padding: 3px 0" type="text" @click="detail">查看详情</el-button>
       </div>
       <div class="item">
         <span>联系方式：15918727869 </span>
@@ -14,6 +13,9 @@
       <div class="item">
         <span>接诊医院：长沙市第一医院 </span>
         <span>呼吸科</span>
+      </div>
+      <div class="item">
+         <el-button style="float: right; padding: 13px 5px" type="text">查看详情</el-button>
       </div>
     </el-card>
     <!-- 底部 -->

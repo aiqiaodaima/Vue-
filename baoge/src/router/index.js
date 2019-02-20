@@ -23,8 +23,11 @@ import DocTransferOutDetails from '@/components/home/bothway/DocTransferOutDetai
 // 远程会诊
 import MbConsultationApply from '@/components/home/telemedicine/MbConsultationApply'
 import ConsultationList from '@/components/home/telemedicine/ConsultationList'
+import ConsultationCgList from '@/components/home/telemedicine/ConsultationCgList'
+import DocConsultationListDetails from '@/components/home/telemedicine/DocConsultationListDetails'
 // 远程培训
 import Teaching from '@/components/home/trainning/Teaching'
+import Health from '@/components/home/trainning/Health'
 import MbRemoteTraningDetails from '@/components/home/trainning/MbRemoteTraningDetails'
 import Guide from '@/components/home/trainning/Guide'
 Vue.use(Router)
@@ -140,6 +143,22 @@ export default new Router({
       name: "DocTransferOutDetails",
       component: DocTransferOutDetails
     },
+    {
+      path: "/consultationCgList",
+      name: "ConsultationCgList",
+      component: ConsultationCgList
+    },
+    {
+      path: "/docConsultationListDetails",
+      name: "DocConsultationListDetails",
+      component: DocConsultationListDetails
+    },
+    {
+      path: "/health",
+      name: "Health",
+      component: Health
+    },
+
   ],
   // mode: 'history'
 })

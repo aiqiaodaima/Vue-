@@ -19,7 +19,9 @@
     <!-- 底部 -->
     <div style="height:50px;"></div>
     <footer>
-      <el-pagination background layout="prev, pager, next" :total="100" page-size=5 pager-count = 5 class="page"></el-pagination>
+      <el-pagination align="right" background @current-change="handleCurrentChange" :current-page.sync="currentPage"
+      :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
+    </el-pagination>
 
     </footer>
   </div>
@@ -30,12 +32,56 @@
   export default {
     data() {
       return {
-
+        isShow: true, // 判断要不要显示
+        daterange: [],
+        cgName: "",
+        tableData: [],
+        currentPage: 1,
+        total: 0, //总页数
+        pageSize: 10, //每页大小
+        hospitalId: "",
+        startTime: "",
+        endTime: "",
       }
     },
     methods: {
       detail() {
 
+      },
+      selectTrainingRecordPage() {
+        this.$post
+          ("cgs/selectGsPage", {
+            hospitalId:this.hospitalId,
+            pageNo: this.currentPage,
+            pageSize: this.pageSize,
+            startTime: this.startTime,
+            endTime: this.endTime,
+            cgName: this.cgName
+          })
+          .then(res => {
+            if (res.customPage.rows) {
+              this.tableData = res.customPage.rows.map(item => {
+                item.uploadDate = this.$moment(item.uploadDate).format("YYYY-MM-DD");
+                return item;
+              });
+              this.currentPage = res.customPage.page;
+              this.pageSize = res.customPage.pagesize;
+              this.total = res.customPage.records;
+            }
+          })
+      },
+       handleCurrentChange(val) {
+        this.currentPage = val;
+        this.selectTrainingRecordPage();
+      },
+      searchValue() {
+        this.selectTrainingRecordPage();
+      },
+      selectTrainingRecord(e){
+          this.$router.push({
+            path: '/mbOtherTeamsDetails',
+            query: {id: e.id}
+          })
       }
     },
   }

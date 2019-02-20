@@ -31,7 +31,11 @@
         </van-col>
         <van-col span="6">
           <van-icon @click="consultationList" name="records" />
-          <span @click="consultationList">会诊列表</span>
+          <span @click="consultationList">离线会诊</span>
+        </van-col>
+        <van-col span="6">
+          <van-icon @click="$router.push('ConsultationCgList')" name="records" />
+          <span @click="$router.push('ConsultationCgList')">会诊列表</span>
         </van-col>
       </van-row>
     </div>
@@ -40,11 +44,11 @@
       <van-row type="flex">
         <van-col span="6">
           <van-icon @click="teaching" name="records" />
-          <span>教学培训</span>
+          <span >教学培训</span>
         </van-col>
         <van-col span="6">
-          <van-icon @click="" name="records" />
-          <span>健康讲座</span>
+          <van-icon @click="$router.push('health')" name="records" />
+          <span @click="$router.push('health')">健康讲座</span>
         </van-col>
         <van-col span="6">
           <van-icon  @click="guide" name="records" />
@@ -56,7 +60,7 @@
     <mu-container>
       <mu-bottom-nav>
         <mu-bottom-nav-item title="管理中心" icon="home" to="/home"></mu-bottom-nav-item>
-        <mu-bottom-nav-item title="咨询" icon="favorite"></mu-bottom-nav-item>
+        <!-- <mu-bottom-nav-item title="咨询" icon="favorite"></mu-bottom-nav-item> -->
         <mu-bottom-nav-item title="个人中心" icon="person" to="/person"></mu-bottom-nav-item>
       </mu-bottom-nav>
     </mu-container>

@@ -85,37 +85,18 @@
         </el-form>
       </div>
 
-       <div style="width:100%;" v-show="activeStep==1">
-        <el-collapse v-model="activeName">
+      <div style="width:100%;" v-show="activeStep==1">
+        <el-collapse v-model="activeName" >
           <el-collapse-item v-for="item in typeList" :key="item.type" :title="item.name" :name="item.type">
-            <el-upload
-              action="https://jsonplaceholder.typicode.com/posts/"
-              list-type="picture-card"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove">
-              <i class="el-icon-plus"></i>
-            </el-upload>
-            <el-dialog :visible.sync="dialogVisible">
-              <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
+            <img-upload @deleteImg="deleteSonImg($event)" @sendFatherImg="getSonImg($event)" @toFatherVue="getSonData($event)" :type="item.type" :filePath="'doctor/meeting'"></img-upload>
           </el-collapse-item>
         </el-collapse>
       </div>
 
-      <div style="width:400px;" v-show="activeStep==2">
+      <div v-show="activeStep==2">
         <center><h2>远程会诊申请表</h2></center>
         <br>
         <el-form status-icon ref="ruleForm2" :model="doctorData" :rules="formRules2" label-position="left" label-width="132px" size="small" label-suffix="：">
-          <el-form-item label="申请医生科室" prop="section">
-            <el-select @change="getDoctor" style="width:100%" v-model="doctorData.section">
-              <el-option v-for="(item, index) in sectionList" :key="index" :label="item.seName" :value="item.seName"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="申请医生姓名" prop="doctorItem">
-            <el-select style="width:100%" v-model="doctorData.doctorItem">
-              <el-option v-for="(item, index) in doctorList" :key="index" :label="item.userName" :value="JSON.stringify(item)"></el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label="会诊模式" prop="diagnosisType">
             <el-select style="width:100%" v-model="doctorData.diagnosisType">
               <el-option label="离线会诊" value="LX"></el-option>
@@ -162,13 +143,17 @@
       <el-button v-show="activeStep==1" @click="activeStep=2" size="small" style="width:132px;" type="primary">下一步</el-button>
 
       <el-button v-show="activeStep==2" @click="activeStep=1" size="small" type="primary" style="width:132px;">上一步</el-button>
-      <el-button v-show="activeStep==2" @click="submitForm('ruleForm2')" size="small" style="width:132px;" type="primary">提交</el-button>
+      <el-button :disabled="isDisable" v-show="activeStep==2" @click="submitForm('ruleForm2')" size="small" style="width:132px;" type="primary">提交</el-button>
     </div>
   </el-card>
 </template>
 
 <script>
+  import ImgUpload from '../../public/ImgUpload'
   export default {
+    components:{
+      'img-upload':ImgUpload
+    },
     data() {
       let checkPhone = (rule, value, callback) => {
         if (!value) {
@@ -226,15 +211,15 @@
             { required: true, message: '请填写患者过敏史', trigger: 'blur' },
             {max:1500, message:'字数超出限制', trigger: 'change'}
           ],
-          present:[
+          present: [
             { required: true, message: '请填写患者现病史', trigger: 'blur' },
             {max:1500, message:'字数超出限制', trigger: 'change'}
           ],
-          past:[
+          past: [
             { required: true, message: '请填写患者既往史', trigger: 'blur' },
             {max:1500, message:'字数超出限制', trigger: 'change'}
           ],
-          examine:[
+          examine: [
             { required: true, message: '请填写患者检查内容', trigger: 'blur' },
             {max:1500, message:'字数超出限制', trigger: 'change'}
           ],
@@ -244,15 +229,7 @@
           ]
         },
         doctorData:{},
-        sectionList:[],
-        doctorList:[],
         formRules2:{
-          section:[
-            { required: true, message: '请选择申请医生科室', trigger: 'change' },
-          ],
-          doctorItem:[
-            { required: true, message: '请选择申请医生姓名', trigger: 'change' },
-          ],
           diagnosisType:[
             { required: true, message: '请选择会诊模式', trigger: 'change' },
           ],
@@ -284,60 +261,40 @@
           {type:6,name:'心电资料上传'},
           {type:7,name:'扫描文件上传'},
           {type:8,name:'CT/MR资料上传'}
-        ]
+        ],
+
+        isDisable: false, // 防止多次提交
+
       }
     },
     mounted(){
-      // let user = JSON.parse(sessionStorage.getItem('accountInfo')).user
-      this.categoryHospitalId =  sessionStorage.id
-      this.hospitalName = sessionStorage.hospitalName
-      this.fetchMySection()
-      // this.doctorName = user.userName
-      // this.docId = user.id
+      let user = JSON.parse(sessionStorage.getItem('user'))
+      this.categoryHospitalId =  user.hospitalId
+      this.hospitalName = user.hospitalName
+      this.doctorName = user.userName
+      this.docId = user.id
       // this.applyUserPhone = user.contactPhone
       // this.fetchSection()
     },
     methods:{
-      // 获取本医院科室
-      fetchMySection(){
-        this.$axios
-        .post("section/selectSectionById?hospitalId=" + this.categoryHospitalId)
-        .then(res => {
-          // console.log(res);
-          this.sectionList =  res.data.stList
-        });
-      },
-      // 获取本医院医生
-      getDoctor(e){
-        this.$axios
-        .post("user/selectUserBySeName?rid=7&hospitalId="+ this.categoryHospitalId +"&seName="+ e)
-        .then(res=>{
-          // console.log(res)
-          if(this.doctorData.doctorItem){
-            this.doctorData.doctorItem = ''
-          }
-          this.doctorList = res.data.userList
-        })
-      },
       // 获管理医院科室
       fetchSection(e){
-        this.$axios
-        .post("section/selectSectionById?hospitalId="+e)
+        this.$post
+        ("section/selectSectionById?hospitalId="+e)
         .then(res=>{
           // console.log(res)
-          this.planSectionList = res.data.stList
+          this.planSectionList = res.stList
         })
       },
       // 下一步
       nextStepOne(formName){
-
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // alert('submit!');
             this.activeStep = 1
           } else {
             // console.log('error submit!!');
-            this.activeStep = 1
+            // this.activeStep = 1
             return false;
           }
         });
@@ -345,50 +302,49 @@
       submitForm(formName){
         this.$refs[formName].validate((valid) => {
           if (valid) {
+            this.isDisable = true
             let acList = []
             let aciObj = {aciList:this.fileList}
-            let doctorItem = JSON.parse(this.doctorData.doctorItem)
             let others = {
               categoryHospitalId: this.categoryHospitalId,
-              status: 20,
-              docId: doctorItem.id,
-              doctorName: doctorItem.userName
+              status: 10,
+              docId: this.docId,
+              doctorName: this.doctorName
             }
-            delete this.doctorData.doctorItem
-            delete this.doctorData.section
             let obj = Object.assign({}, this.patientData, this.doctorData, aciObj, others)
             acList.push(obj)
             // alert('submit!');
             // console.log(acList);
             // return false;
-            this.$axios.post('con/insertConsultation',acList,{
+            this.$post('con/insertConsultation',acList,{
               headers: {
                 'Content-Type': 'application/json;charset=UTF-8'
               }
             }).then(res=>{
-              // console.log(res)
-              if(res.data.msg === '1'){
+              console.log(res)
+              if(res.msg === '1'){
                 this.$message({
-                  message: '会诊申请成功',
+                  message: '会诊申请成功,等待医院审核。',
                   type: 'success'
                 })
                 if(this.doctorData.diagnosisType=='LX') {
-                  this.$router.push('/mbRemoteReading')
+                  this.$router.push('consultationList')
                 }else{
-                  this.$router.push('/mbVideoConsultation')
+                  this.$router.push('/docVideoConsultation')
                 }
 
-                let option = {
-                  hospitalName: this.hospitalName,
-                  patientName: this.patientData.patientName,
-                  hospitalId: this.categoryHospitalId
-                }
-                this.$axios.post('send/sendTransferSub',option)
-                    .then(res=>{
-                      console.log(res);
-                    })
+                // let option = {
+                //   hospitalName: this.hospitalName,
+                //   patientName: this.patientData.patientName,
+                //   hospitalId: this.categoryHospitalId
+                // }
+                // this.$axios.post('send/sendTransferSub',option)
+                //     .then(res=>{
+                //       console.log(res);
+                //     })
               }
               else{
+                this.isDisable = false
                 this.$message.error('会诊申请失败！')
               }
             })
@@ -402,7 +358,7 @@
       // 图片上传
       getSonData(e){
         this.fileList.push({type: e.type, imgUrl: e.file});
-        // console.log(this.fileList)
+        console.log(this.fileList)
       },
       getSonImg(e){
         this.dialogImageUrl = e.dialogImageUrl
