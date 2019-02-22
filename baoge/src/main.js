@@ -18,7 +18,11 @@ import {post,fetch,patch,put} from './http'
 // 日期
 import Moment from 'moment'
 Vue.prototype.$moment = Moment;
+// oss上传
+import OssApi from '../src/oss'
 //定义全局变量
+console.log(OssApi)
+Vue.prototype.$OssApi = OssApi.uploadRequest
 Vue.prototype.$post=post;
 Vue.prototype.$fetch=fetch;
 Vue.prototype.$patch=patch;

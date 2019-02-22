@@ -10,8 +10,7 @@
         <el-col :span="12">
           <el-form-item prop="cardFrontImg">
             <el-upload class="avatar-uploader" action="" list-type="picture-card" :show-file-list="false" :on-success="(res, file, fileList) => {handleAvatarSuccess(res, file, fileList, 'cardFrontImg')}"
-              :before-upload="beforeAvatarUpload" :on-change="changeUpload" :data="{filePath: 'doctorImg'}"
-              :http-request="this.$oss.uploadRequest">
+              :on-change="changeUpload" :data="{filePath: 'doctorImg'}" :http-request="ossPost">
               <img v-if="ruleForm.cardFrontImg" :src="$oss + ruleForm.cardFrontImg" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon specialI"><br /><br />身份证正面照片</i>
             </el-upload>
@@ -20,8 +19,8 @@
         <el-col :span="12">
           <el-form-item prop="cardVersoImg">
             <el-upload class="avatar-uploader" action="" list-type="picture-card" :show-file-list="false" :on-success="(res, file, fileList) => {handleAvatarSuccess(res, file, fileList, 'cardVersoImg')}"
-              :before-upload="beforeAvatarUpload" :on-change="changeUpload" :data="{filePath: 'doctorImg'}"
-              :http-request="this.$oss.uploadRequest">
+               :on-change="changeUpload" :data="{filePath: 'doctorImg'}"
+              :http-request="ossPost">
               <img v-if="ruleForm.cardVersoImg" :src="$oss + ruleForm.cardVersoImg" class="avatar">
               <i v-else class="el-icon-plus avatar-uploader-icon specialI"><br /><br />身份证反面照片</i>
             </el-upload>
@@ -32,24 +31,29 @@
         </el-dialog>
       </el-row>
       <p class="form-header">医师执业证书</p>
+      <el-form-item prop="licensedImg">
       <el-upload class="avatar-uploader" action="" list-type="picture-card" :show-file-list="false" :on-success="(res, file, fileList) => {handleAvatarSuccess(res, file, fileList, 'licensedImg')}"
-        :before-upload="beforeAvatarUpload" :on-change="changeUpload" :data="{filePath: 'doctorImg'}" :http-request="$ossHostName">
-        <img v-if="ruleForm.licensedImg" :src="$ossAssetName + ruleForm.licensedImg" class="avatar">
+        :on-change="changeUpload" :data="{filePath: 'doctorImg'}" :http-request="ossPost">
+        <img v-if="ruleForm.licensedImg" :src="$oss + ruleForm.licensedImg" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
       <el-dialog :visible.sync="dialogVisible">
         <img width="100%" :src="dialogImageUrl" alt="">
       </el-dialog>
-      <!-- </el-form-item>
 
-      <el-button type="primary" size="medium" class="maxBtn">下一步</el-button>
-      <el-form-item> -->
-      <el-button type="primary" size="medium" class="maxBtn">下一步</el-button>
+      <!-- </el-form-item> -->
+      </el-form-item>
+
+      <el-button type="primary" size="medium" class="maxBtn"  @click="submitForm('ruleForm')">下一步</el-button>
+      </el-form-item>
+      <!-- <el-button type="primary" size="medium" class="maxBtn">下一步</el-button> -->
     </el-form>
 
   </div>
 </template>
+
 <script>
+  import OssApi from '../../oss'
   export default {
 
     data() {
@@ -63,11 +67,15 @@
         }
       }
       return {
-        $ossHostName:"https://imuts.oss-cn-shenzhen.aliyuncs.com/demoimages/hunan",
+        $ossHostName: "https://imuts.oss-cn-shenzhen.aliyuncs.com/demoimages/hunan",
+        // $OssApi :OssApi,
         dialogImageUrl: "",
         dialogVisible: false,
         ruleForm: {
-          uptype: ""
+          card: '',
+          cardFrontImg: '',
+          cardVersoImg: '',
+          licensedImg: '',
         },
         rules: {
           card: [{
@@ -86,6 +94,21 @@
               trigger: ['change', 'blur']
             }
           ],
+          cardFrontImg: [{
+            required: true,
+            message: '请上传身份证正面照',
+            trigger: 'blur'
+          }],
+          cardVersoImg: [{
+            required: true,
+            message: '请上传身份证反面照',
+            trigger: 'blur'
+          }],
+          licensedImg: [{
+            required: true,
+            message: '请上传医师执证',
+            trigger: 'blur'
+          }]
         }
       };
     },
@@ -99,6 +122,9 @@
       handlePictureCardPreview(file) {
         this.dialogImageUrl = file.url;
         this.dialogVisible = true;
+      },
+      ossPost(file) {
+        OssApi.uploadRequest(file)
       },
       handleAvatarSuccess(res, file, fileList, filename) {
         this.ruleForm[filename] = res.name
@@ -124,7 +150,28 @@
             fileList.shift()
           }
         }
+      },
+      submitForm(formName) {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            this.ruleForm =  Object.assign({}, this.ruleForm, JSON.parse(sessionStorage.sing1),JSON.parse(sessionStorage.sing2));
+             this.$post('/register/registerUser',this.ruleForm).then(res => {
+               if (res.msg === '1') {
+                this.$router.push('login')
+              } else {
+                this.$message.error('提交失败')
+
+              }
+             })
+          } else {
+            console.log("error submit!!");
+            return false;
+          }
+        });
       }
+    },
+    mounted() {
+      // console.log(JSON.parse(sessionStorage.sing1) )
     }
   };
 
@@ -133,6 +180,11 @@
   .el-upload-list--picture-card .el-upload-list__item {
     width: 120px !important;
     height: 120px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
   }
 
   .specialI {
