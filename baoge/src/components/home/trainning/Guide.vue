@@ -6,7 +6,11 @@
         <span>{{item.cgName}} </span>
       </div>
       <div class="item">
-        <el-button style="float: right; padding: 0 0 13px" type="text" @click="detail">查看详情</el-button>
+        <span>{{item.docName}} </span>
+         <span>{{$moment(item.createTime).format('YYYY-MM-DD')}} </span>
+      </div>
+      <div class="item">
+        <el-button style="float: right; padding: 0 0 13px" type="text" @click="selectTrainingRecord(item.id)">查看详情</el-button>
       </div>
     </el-card>
     <!-- 底部 -->
@@ -41,9 +45,6 @@
       this.selectTrainingRecordPage()
     },
     methods: {
-      detail() {
-
-      },
       selectTrainingRecordPage() {
         this.$post
           ("cgs/selectGsPage", {
@@ -74,9 +75,10 @@
         this.selectTrainingRecordPage();
       },
       selectTrainingRecord(e){
+          sessionStorage.setItem('canPDF',true)
           this.$router.push({
-            path: '/mbOtherTeamsDetails',
-            query: {id: e.id}
+            path: '/guideDetails',
+            query: {id: e}
           })
       }
     },
@@ -113,11 +115,12 @@
     color: #000;
   }
   footer{
+    background-color: #eaeaea;
     position: fixed;
-    bottom: 10px;
-    width: 100%;
-    .page{
-      margin: 0 auto;
-    }
+    bottom: 0;
+    width: 90%; /*写给不支持calc()的浏览器*/
+    width: -moz-calc(100% - (10px + 5px) * 2);
+    width: -webkit-calc(100% - (10px + 5px) * 2);
+    width: calc(100% - (10px + 5px) * 2);
   }
 </style>

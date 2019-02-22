@@ -88,9 +88,9 @@
           </el-row>
           <el-row>
             <el-col>
-              <el-form-item label-width="96px" label="双向转诊医保优惠政策">
-                在长沙市职工医疗保险和城乡居民保险范围内的参保人员，对按项目付费后付制结算方式管理医疗费用的，建立双向转诊“一增一减一免”制度，试行逐步提高上转患者到上级医院住院医疗费用支付标准，减去在基层医疗机构住院的起付线，免除第二次住院28天时间的限制;试行逐步提高下转患者住院医疗费用支付标准，减免在上级医院起付标准50%，免除第二次住院28天时间的限制。
-              </el-form-item>
+              <p class="tip_title">双向转诊医保优惠政策</p>
+              <p class="tip_content">在长沙市职工医疗保险和城乡居民保险范围内的参保人员，对按项目付费后付制结算方式管理医疗费用的，建立双向转诊“一增一减一免”制度，试行逐步提高上转患者到上级医院住院医疗费用支付标准，减去在基层医疗机构住院的起付线，免除第二次住院28天时间的限制
+                ;试行逐步提高下转患者住院医疗费用支付标准，减免在上级医院起付标准50%，免除第二次住院28天时间的限制。</p>
             </el-col>
           </el-row>
         </el-form>
@@ -162,13 +162,13 @@
       <img width="100%" src="http://imuts.oss-cn-shenzhen.aliyuncs.com/images/5c20fcc56bb16668de80cd16e456521.jpg" alt="">
     </el-dialog>
     <div style="text-align:center;margin-top:10px;">
-      <el-button v-show="activeStep==0" @click="nextStepOne('ruleForm1')" size="small" style="width:132px;" type="primary">下一步</el-button>
+      <el-button v-show="activeStep==0" @click="nextStepOne('ruleForm1')" size="small" style="width:3.5rem;" type="primary">下一步</el-button>
 
-      <el-button v-show="activeStep==1" @click="activeStep=0" size="small" type="primary" style="width:132px;">上一步</el-button>
-      <el-button v-show="activeStep==1" @click="activeStep=2" size="small" style="width:132px;" type="primary">下一步</el-button>
+      <el-button v-show="activeStep==1" @click="activeStep=0" size="small" type="primary" style="width:3.5rem;">上一步</el-button>
+      <el-button v-show="activeStep==1" @click="activeStep=2" size="small" style="width:3.5rem;" type="primary">下一步</el-button>
 
-      <el-button v-show="activeStep==2" @click="activeStep=1" size="small" type="primary" style="width:132px;">上一步</el-button>
-      <el-button :disabled="isDisable" v-show="activeStep==2" @click="submitForm('ruleForm2')" size="small" style="width:132px;"
+      <el-button v-show="activeStep==2" @click="activeStep=1" size="small" type="primary" style="width:3.5rem;">上一步</el-button>
+      <el-button :disabled="isDisable" v-show="activeStep==2" @click="submitForm('ruleForm2')" size="small" style="width:3.5rem;"
         type="primary">提交</el-button>
     </div>
   </el-card>
@@ -187,12 +187,12 @@
         } else if (!Number.isInteger(value)) {
           callback(new Error('请输入数字值'));
         } else {
-          // let len = String(value) .length
-          // if (len != 11) {
-          //   callback(new Error('手机号码必须为11位'));
-          // } else {
-          callback();
-          // }
+          let len = String(value).length
+          if (len != 11) {
+            callback(new Error('手机号码必须为11位'));
+          } else {
+            callback();
+          }
         }
       };
       let checkCard = (rule, value, callback) => {
@@ -517,4 +517,18 @@
 </script>
 
 <style scoped>
+  /deep/ .el-step__title {
+    font-size: 0.42rem;
+  }
+
+  .tip_title {
+    font-size: 0.45rem;
+  }
+
+  .tip_content {
+    text-indent: 2em;
+    letter-spacing: 1.5px;
+    font-size: 0.3rem;
+  }
+
 </style>

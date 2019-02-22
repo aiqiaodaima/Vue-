@@ -288,6 +288,7 @@
       },
       // 下一步
       nextStepOne(formName){
+        // this.activeStep = 1
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // alert('submit!');
@@ -376,4 +377,17 @@
 </script>
 
 <style scoped>
+  /deep/ .el-step__title {
+    font-size: 0.42rem;
+  }
+
+  .tip_title {
+    font-size: 0.45rem;
+  }
+
+  .tip_content {
+    text-indent: 2em;
+    letter-spacing: 1.5px;
+    font-size: 0.3rem;
+  }
 </style>

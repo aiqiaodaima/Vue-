@@ -4,8 +4,13 @@ import {
   Message
 } from 'element-ui';
 
-axios.defaults.timeout = 5000;
-axios.defaults.baseURL = 'http://192.168.1.150:1002';
+axios.defaults.timeout = 50000;
+// axios.defaults.baseURL = 'http://192.168.1.150:1002';
+if (process.env.NODE_ENV == 'development') {
+  axios.defaults.baseURL = 'http://192.168.1.150:1002';
+} else if (process.env.NODE_ENV == 'production') {
+  axios.defaults.baseURL = 'https://yd.imuts.cn';
+}
 
 // 设置提交数据的格式
 axios.defaults.transformRequest = [function (data,headers) {
@@ -23,7 +28,8 @@ axios.defaults.transformRequest = [function (data,headers) {
 axios.defaults.headers = {
   'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
 }
-
+//  跨域
+axios.defaults.withCredentials = true
 //POST传参序列化
 // axios.interceptors.request.use((config) => {
 //   // config.headers = {

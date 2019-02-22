@@ -101,7 +101,34 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    }
+    },
+    getVerifyCode() {
+        let phone = this.ruleForm.phone
+        if (phone) {
+          this.isSending = !this.isSending
+          this.second--
+          let timer = setInterval(() => {
+            this.second--
+            if (this.second === 0) {
+              this.isSending = !this.isSending
+              this.second = 60
+              this.verifyBtnVal = '重新获取'
+              clearInterval(timer)
+            }
+          }, 1000);
+          this.$axios.post('send/forgetPwd', { phone }).then(res => {
+            console.log(res.data)
+            if (res.data.mag === '2') {
+              this.$message.error('验证码发送失败!')
+            }
+            if (res.data.msg === '1') {
+              this.$message.success('验证码发送成功!')
+            }
+          });
+        } else {
+          this.$message.error('请输入手机号码!')
+        }
+      },
   }
 };
 </script>

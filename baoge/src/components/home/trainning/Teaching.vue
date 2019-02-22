@@ -122,10 +122,13 @@
       }
     }
     footer{
-      width: 90%;
-      position: absolute;
-      height: 50px;
-      bottom: 10px;
+      background-color: #eaeaea;
+      position: fixed;
+      bottom: 0;
+      width: 90%; /*写给不支持calc()的浏览器*/
+      width: -moz-calc(100% - (10px + 5px) * 2);
+      width: -webkit-calc(100% - (10px + 5px) * 2);
+      width: calc(100% - (10px + 5px) * 2);
     }
   }
 

@@ -112,7 +112,7 @@ export default {
                 sessionStorage.setItem("user",JSON.stringify(res.user))
               }
               else{
-                this.$message.error(this.errorInfos[res.data.msg] || '系统异常');
+                this.$message.error(this.errorInfos[res.msg] || '系统异常');
                 this.loading = false;
               }
             })

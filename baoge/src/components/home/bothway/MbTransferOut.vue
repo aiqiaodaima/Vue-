@@ -22,12 +22,12 @@
     <div style="height:50px;"></div>
     <footer>
       <el-pagination
+      small background
       align="center"
-      background
       @current-change="handleCurrentChange"
       :current-page.sync="pageNo"
-      :page-size="4"
-      layout="total, prev, pager, next, jumper"
+      :page-size="5"
+      layout="total, prev, pager, next"
       :total="resultCount">
     </el-pagination>
 
@@ -57,7 +57,7 @@
       },
       fetchData(){
         this.$post
-        ('case/selectCasePage?pageSize=4&type=A&pageNo='+this.pageNo +
+        ('case/selectCasePage?pageSize=5&type=A&pageNo='+this.pageNo +
               '&applyUserId=' + this.applyUserId +
               '&startTime=' + this.startTime +
               '&endTime=' + this.endTime +
@@ -123,11 +123,12 @@
     color: #000;
   }
   footer{
+    background-color: #eaeaea;
     position: fixed;
-    bottom: 10px;
-    width: 100%;
-    .page{
-      margin: 0 auto;
-    }
+    bottom: 0;
+    width: 90%; /*写给不支持calc()的浏览器*/
+    width: -moz-calc(100% - (10px + 5px) * 2);
+    width: -webkit-calc(100% - (10px + 5px) * 2);
+    width: calc(100% - (10px + 5px) * 2);
   }
 </style>

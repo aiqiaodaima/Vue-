@@ -9,7 +9,8 @@ import City from '@/components/base/city'
 import Home from '@/components/home/home'
 // 个人
 import Person from '@/components/person/index'
-import Person2 from '@/components/person/index2'
+import ChangePassWord from '@/components/person/ChangePassWord'
+import PersonDetail from '@/components/person/PersonDetail'
 import Invite from '@/components/person/invite'
 import Wallet from '@/components/person/wallet'
 import Kiting from '@/components/person/kiting'
@@ -30,6 +31,7 @@ import Teaching from '@/components/home/trainning/Teaching'
 import Health from '@/components/home/trainning/Health'
 import MbRemoteTraningDetails from '@/components/home/trainning/MbRemoteTraningDetails'
 import Guide from '@/components/home/trainning/Guide'
+import GuideDetails from '@/components/home/trainning/GuideDetails'
 Vue.use(Router)
 
 export default new Router({
@@ -72,11 +74,6 @@ export default new Router({
       path: "/person",
       name: "person",
       component: Person
-    },
-    {
-      path: "/person2",
-      name: "person2",
-      component: Person2
     },
     {
       path: "/invite",
@@ -158,6 +155,22 @@ export default new Router({
       name: "Health",
       component: Health
     },
+    {
+      path: "/guideDetails",
+      name: "GuideDetails",
+      component: GuideDetails
+    },
+    {
+      path: "/changePassWord",
+      name: "ChangePassWord",
+      component: ChangePassWord
+    },
+    {
+      path: "/personDetail",
+      name: "PersonDetail",
+      component: PersonDetail
+    },
+
 
   ],
   // mode: 'history'

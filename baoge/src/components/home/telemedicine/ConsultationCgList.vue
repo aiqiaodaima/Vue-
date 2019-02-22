@@ -24,8 +24,8 @@
     <!-- 底部 -->
     <div style="height:50px;"></div>
     <footer>
-      <el-pagination align="center" background @current-change="handleCurrentChange" :current-page.sync="currentPage"
-        :page-size="pageSize" layout="total, prev, pager, next, jumper" :total="total">
+      <el-pagination align="center" background small @current-change="handleCurrentChange" :current-page.sync="currentPage"
+        :page-size="pageSize" layout="total, prev, pager, next" :total="total">
       </el-pagination>
 
 
@@ -159,14 +159,14 @@
     color: #000;
   }
 
-  footer {
+  footer{
+    background-color: #eaeaea;
     position: fixed;
-    bottom: 10px;
-    width: 100%;
-
-    .page {
-      margin: 0 auto;
-    }
+    bottom: 0;
+    width: 90%; /*写给不支持calc()的浏览器*/
+    width: -moz-calc(100% - (10px + 5px) * 2);
+    width: -webkit-calc(100% - (10px + 5px) * 2);
+    width: calc(100% - (10px + 5px) * 2);
   }
 
 </style>
