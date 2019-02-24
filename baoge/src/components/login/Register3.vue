@@ -72,6 +72,7 @@
         dialogImageUrl: "",
         dialogVisible: false,
         ruleForm: {
+          rid: 6,
           card: '',
           cardFrontImg: '',
           cardVersoImg: '',
@@ -157,7 +158,7 @@
             this.ruleForm =  Object.assign({}, this.ruleForm, JSON.parse(sessionStorage.sing1),JSON.parse(sessionStorage.sing2));
              this.$post('/register/registerUser',this.ruleForm).then(res => {
                if (res.msg === '1') {
-                this.$router.push('login')
+                this.$router.push('/')
               } else {
                 this.$message.error('提交失败')
 

@@ -12,8 +12,8 @@
             <el-button v-else slot="append" @click="getCode()" :disabled = isSing>发送验证码</el-button>
           </el-input>
         </el-form-item>
-        <el-form-item prop="pass">
-          <el-input type="password" prefix-icon="fa fa-lock" v-model="ruleForm2.pass" autocomplete="off" placeholder="请输入密码"></el-input>
+        <el-form-item prop="password">
+          <el-input type="password" prefix-icon="fa fa-lock" v-model="ruleForm2.password" autocomplete="off" placeholder="请输入密码"></el-input>
         </el-form-item>
         <el-form-item prop="checkPass">
           <el-input type="password" prefix-icon="fa fa-lock" v-model="ruleForm2.checkPass" autocomplete="off" placeholder="请确认密码"></el-input>
@@ -90,7 +90,7 @@ export default {
     var validatePass2 = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm2.pass) {
+      } else if (value !== this.ruleForm2.password) {
         callback(new Error("两次输入密码不一致!"));
       } else {
         callback();
@@ -101,13 +101,13 @@ export default {
       ruleForm2: {
         phone: "",
         authCode: "",
-        pass: "",
+        password: "",
         checkPass: ""
       },
       rules2: {
         phone: [{ validator: validatephone, trigger: "blur" }, {validator: checkPhone,  trigger: 'blur' }],
         authCode: [{ validator: validateauthCode, trigger: "blur" },{ validator: checkVerifyCode, trigger: "blur" }],
-        pass: [{ validator: validatePass, trigger: "blur" }],
+        password: [{ validator: validatePass, trigger: "blur" }],
         checkPass: [{ validator: validatePass2, trigger: "blur" }]
       },
       loading: false,

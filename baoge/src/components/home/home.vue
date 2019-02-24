@@ -9,11 +9,11 @@
       <p class="headerp">双向转诊 </p>
       <van-row type="flex">
         <van-col span="6">
-          <van-icon @click="toApply" name="records" />
+          <van-icon @click="toApply" name="exchange-record" />
           <span @click="toApply">转诊申请</span>
         </van-col>
         <van-col span="6">
-          <van-icon @click="mbOut" name="records" />
+          <van-icon @click="mbOut" name="idcard" />
           <span @click="mbOut">转出列表</span>
         </van-col>
         <van-col span="6">
@@ -26,15 +26,15 @@
       <p class="headerp">远程会诊 </p>
       <van-row type="flex">
         <van-col span="6">
-          <van-icon  @click="telApply" name="records" />
-          <span  @click="telApply">会诊申请</span>
+          <van-icon @click="telApply" name="certificate" />
+          <span @click="telApply">会诊申请</span>
         </van-col>
         <van-col span="6">
-          <van-icon @click="consultationList" name="records" />
+          <van-icon @click="consultationList" name="info-o" />
           <span @click="consultationList">离线会诊</span>
         </van-col>
         <van-col span="6">
-          <van-icon @click="$router.push('ConsultationCgList')" name="records" />
+          <van-icon @click="$router.push('ConsultationCgList')" name="completed" />
           <span @click="$router.push('ConsultationCgList')">会诊列表</span>
         </van-col>
       </van-row>
@@ -43,16 +43,16 @@
       <p class="headerp">远程培训 </p>
       <van-row type="flex">
         <van-col span="6">
-          <van-icon @click="teaching" name="records" />
-          <span >教学培训</span>
+          <van-icon @click="teaching" name="contact" />
+          <span>教学培训</span>
         </van-col>
         <van-col span="6">
-          <van-icon @click="$router.push('health')" name="records" />
+          <van-icon @click="$router.push('health')" name="chat" />
           <span @click="$router.push('health')">健康讲座</span>
         </van-col>
         <van-col span="6">
-          <van-icon  @click="guide" name="records" />
-          <span  @click="guide">诊疗指南</span>
+          <van-icon @click="guide" name="tosend" />
+          <span @click="guide">诊疗指南</span>
         </van-col>
       </van-row>
     </div>
@@ -92,19 +92,19 @@
       mbOut() {
         this.$router.push("mbTransferOut")
       },
-      mbIn(){
+      mbIn() {
         this.$router.push('mbTransferIn')
       },
-      telApply(){
+      telApply() {
         this.$router.push("mbConsultationApply")
       },
-      teaching(){
+      teaching() {
         this.$router.push("teaching")
       },
-      consultationList(){
+      consultationList() {
         this.$router.push("consultationList")
       },
-      guide(){
+      guide() {
         this.$router.push("guide")
       }
     },

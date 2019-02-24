@@ -23,7 +23,7 @@
           <template slot="title" class="">
             <span style="font-size:14px;margin:0 0 5px 0;">病历图片</span>
             <ul class="slotUl">
-              <li v-for="i in 5"><img src="../../../assets/login.jpg" alt=""></li>
+              <li v-for="item in imgList"><img :src="$oss + item.imgUrl" alt=""></li>
             </ul>
           </template>
         </van-cell>
@@ -56,6 +56,7 @@
     data() {
       return {
         info: {},
+        imgList:[]
       }
     },
     methods: {
@@ -64,6 +65,7 @@
           .then(res => {
             console.log(res);
             this.info = res.applyConsultation || {}
+            this.imgList = res.imgList || []
             if (this.info.protectType) {
               switch (this.info.protectType) {
                 case 1:

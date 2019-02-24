@@ -18,7 +18,7 @@
         <span>{{item.chamber}}</span>
       </div>
       <div class="item">
-         <el-button style="float: right; padding: 13px 5px" type="text" @click="selectConById(item.id)">查看详情</el-button>
+        <el-button style="float: right; padding: 13px 5px" type="text" @click="selectConById(item.id)">{{item.statu}}</el-button>
       </div>
     </el-card>
     <!-- 底部 -->
@@ -38,7 +38,7 @@
   export default {
     data() {
       return {
-        hospital:'',
+        hospital: '',
         arrWC: [],
         currentPage: 1,
         total: 0, //总页数
@@ -76,14 +76,14 @@
 
     methods: {
       // 获取医院
-      getHospital(){
+      getHospital() {
         this.$post('infor/selectInforName')
-        .then(res =>{
-          console.log(res)
-          if(res.applyInformation){
-            this.hospital = res.applyInformation.hospitalName || ''
-          }
-        })
+          .then(res => {
+            console.log(res)
+            if (res.applyInformation) {
+              this.hospital = res.applyInformation.hospitalName || ''
+            }
+          })
       },
       selectConByCategory() {
         this.$post(
@@ -96,6 +96,33 @@
           console.log(res)
           this.arrWC = res.pagetion.list;
           this.total = res.pagetion.resultCount;
+          let $statuChange = (e, id) => {
+              if (e == 1) {
+                return '待医院审核'
+              } else if (e == 2) {
+                return '等待接收'
+              } else if (e == 3) {
+                if (id == 'doc') {
+                  return '待医生接收'
+                } else {
+                  return '待专家接收'
+                }
+              } else if (e == 4) {
+                return '已接收'
+              } else if (e == 5) {
+                return '已就诊'
+              } else if (e == 6) {
+                return '已住院'
+              } else if (e == 7) {
+                return '未就诊'
+              } else if (e == 8) {
+                return '已撤销'
+              } else if (e == 9) {
+                return '本医院撤销'
+              }
+            }
+            this.arrWC.map((item)=>{$statuChange(item.statu)})
+            // this.arrWC.statu =  $statuChange(this.info.statu)
         });
       },
       handleCurrentChange(val) {
@@ -159,11 +186,12 @@
     color: #000;
   }
 
-  footer{
+  footer {
     background-color: #eaeaea;
     position: fixed;
     bottom: 0;
-    width: 90%; /*写给不支持calc()的浏览器*/
+    width: 90%;
+    /*写给不支持calc()的浏览器*/
     width: -moz-calc(100% - (10px + 5px) * 2);
     width: -webkit-calc(100% - (10px + 5px) * 2);
     width: calc(100% - (10px + 5px) * 2);

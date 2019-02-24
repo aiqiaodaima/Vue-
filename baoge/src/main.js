@@ -8,6 +8,7 @@ import 'font-awesome/css/font-awesome.css'
 import 'lib-flexible/flexible.js'
 import routers from './router/index'
 // import Vue from 'vue';
+// import 'vant/lib/icon/local.css';
 import Vant from 'vant';
 import 'vant/lib/index.css';
 import MuseUI from 'muse-ui';

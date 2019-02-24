@@ -8,8 +8,9 @@ axios.defaults.timeout = 50000;
 // axios.defaults.baseURL = 'http://192.168.1.150:1002';
 if (process.env.NODE_ENV == 'development') {
   axios.defaults.baseURL = 'http://192.168.1.150:1002';
+  // axios.defaults.baseURL = 'https://yd.imuts.cn'
 } else if (process.env.NODE_ENV == 'production') {
-  axios.defaults.baseURL = 'https://yd.imuts.cn';
+  axios.defaults.baseURL = 'https://x.yraise.com';
 }
 
 // 设置提交数据的格式

@@ -56,6 +56,7 @@ export default {
     getMsg(){
       this.$post("user/selectUserByUid?uid=" + this.docId).then(res => {
         console.log(res)
+        // if()
         this.user = res.user;
         // this.imageUrl = this.user.photo;
         // this.selectSeName(this.user.hospitalId);

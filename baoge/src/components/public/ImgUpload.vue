@@ -9,7 +9,7 @@
       :limit="limitNum"
       :on-exceed="handleExceed"
       :data="getData"
-      :http-request="$oss.uploadRequest"
+      :http-request="ossPost"
       :before-upload="beforeUpload"
       :on-success="handleUpload"
       :on-preview="handlePreview"
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+  import OssApi from '../../oss'
   export default {
     props:{
       type:'',
@@ -53,6 +54,9 @@
           message:'图片数量超出限制',
           type:'warning'
         })
+      },
+      ossPost(file){
+        OssApi.uploadRequest(file)
       },
       beforeUpload(file) {
         const isJPG = file.type === 'image/jpeg';

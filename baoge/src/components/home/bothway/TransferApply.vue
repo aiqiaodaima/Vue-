@@ -433,7 +433,7 @@
       },
       // 下一步
       nextStepOne(formName) {
-         this.activeStep = 1
+        //  this.activeStep = 1
         this.$refs[formName].validate((valid) => {
           if (valid) {
             // alert('submit!');
