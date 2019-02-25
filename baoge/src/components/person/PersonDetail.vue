@@ -42,24 +42,20 @@
 </template>
 <script>
 export default {
-
   data() {
     return {
       docId :JSON.parse(sessionStorage.user).id || '',
       user:{}
+
     };
   },
-  created(){
+  mounted(){
     this.getMsg()
   },
   methods:{
     getMsg(){
-      this.$post("user/selectUserByUid?uid=" + this.docId).then(res => {
-        console.log(res)
-        // if()
+      this.$post("/user/selectUserByUid",{uid:this.docId}).then(res => {
         this.user = res.user;
-        // this.imageUrl = this.user.photo;
-        // this.selectSeName(this.user.hospitalId);
       });
     }
   }

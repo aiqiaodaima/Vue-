@@ -23,7 +23,7 @@
           <template slot="title" class="">
             <span style="font-size:14px;margin:0 0 5px 0;">病历图片</span>
             <ul class="slotUl">
-              <li v-for="item in imgList"><img :src="$oss + item.imgUrl" alt=""></li>
+              <li v-for="item in imgList"><img :src="$oss + item.imgUrl" alt=""  preview preview-text="病历图片"></li>
             </ul>
           </template>
         </van-cell>
@@ -66,6 +66,7 @@
             console.log(res);
             this.info = res.applyConsultation || {}
             this.imgList = res.imgList || []
+            this.$previewRefresh()
             if (this.info.protectType) {
               switch (this.info.protectType) {
                 case 1:

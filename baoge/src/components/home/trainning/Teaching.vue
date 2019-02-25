@@ -17,16 +17,17 @@
     </el-card>
     <div style="height:60px;"></div>
     <footer>
-    <el-pagination small align="center" background @current-change="handleCurrentChange" :pager-count=5 :current-page.sync="currentPage" :page-size="pageSize" layout="total, prev, pager, next" :total="total">
-    </el-pagination>
+      <el-pagination small align="center" background @current-change="handleCurrentChange" :pager-count=5
+        :current-page.sync="currentPage" :page-size="pageSize" layout="total, prev, pager, next" :total="total">
+      </el-pagination>
 
     </footer>
   </div>
 </template>
 <script>
   export default {
-    data(){
-      return{
+    data() {
+      return {
         docName: "",
         docName2: "",
         ktName: "",
@@ -36,25 +37,23 @@
         total: 0, //总页数
         pageSize: 5, //每页大小
         type: 1,
-        currentVal:'教学培训',
-        changshaName:'',
-        hospitalId:""
+        currentVal: '教学培训',
+        changshaName: '',
+        hospitalId: ""
       }
     },
     mounted() {
-    this.hospitalId = JSON.parse(sessionStorage.getItem('user')).hospitalId;
-    this.$post
-      ("infor/selectInforName?")
-      .then(res=>{
-       this.changshaName = res.applyInformation.hospitalName
-    })
-    this.selectTrainingPageByType();
-  },
-  methods: {
-    selectTrainingPageByType() {
-      this.$post
-        (
-          "training/selectTrainingPageByType?pageSize=" +
+      this.hospitalId = JSON.parse(sessionStorage.getItem('user')).hospitalId;
+      this.$post("/infor/selectInforName?")
+        .then(res => {
+          this.changshaName = res.applyInformation.hospitalName
+        })
+      this.selectTrainingPageByType();
+    },
+    methods: {
+      selectTrainingPageByType() {
+        this.$post(
+            "/training/selectTrainingPageByType?pageSize=" +
             this.pageSize +
             "&pageNo=" +
             this.currentPage +
@@ -63,44 +62,47 @@
             "&title=" +
             this.ktName2 +
             "&speaker=" +
-            this.docName2+
-            "&hospitalId="+this.hospitalId
-        )
-        .then(res => {
-          console.log(res)
-          this.tableData=res.customPage.rows.map(item=>{
-            item.createTime = this.$moment(item.createTime).format('YYYY-MM-DD')
-            if(item.type===1){
-              item.type="教学培训";
-            }else if(item.type===2){
-              item.type="健康讲座";
-            }
-            return item
+            this.docName2 +
+            "&hospitalId=" + this.hospitalId
+          )
+          .then(res => {
+            console.log(res)
+            this.tableData = res.customPage.rows.map(item => {
+              item.createTime = this.$moment(item.createTime).format('YYYY-MM-DD')
+              if (item.type === 1) {
+                item.type = "教学培训";
+              } else if (item.type === 2) {
+                item.type = "健康讲座";
+              }
+              return item
+            });
+            this.currentPage = res.customPage.page;
+            this.pageSize = res.customPage.pagesize;
+            this.total = res.customPage.records;
           });
-          this.currentPage = res.customPage.page;
-          this.pageSize = res.customPage.pagesize;
-          this.total = res.customPage.records;
-        });
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.selectTrainingPageByType();
-    },
-    giveValue(){
-      this.ktName2 = this.ktName;
-      this.docName2 = this.docName;
-      this.selectTrainingPageByType();
+      },
+      handleCurrentChange(val) {
+        this.currentPage = val;
+        this.selectTrainingPageByType();
+      },
+      giveValue() {
+        this.ktName2 = this.ktName;
+        this.docName2 = this.docName;
+        this.selectTrainingPageByType();
 
-    },
-    //查看
-    selectTraining(id){
-       this.$router.push({
-        path:'/MbRemoteTraningDetails',
-        query:{id}
-      })
+      },
+      //查看
+      selectTraining(id) {
+        this.$router.push({
+          path: '/MbRemoteTraningDetails',
+          query: {
+            id
+          }
+        })
+      }
     }
-  }
-};
+  };
+
 </script>
 
 <style lang="less" scoped>
@@ -109,23 +111,28 @@
     overflow: hidden;
     position: relative;
     min-height: 660px;
+
     center {
       font-size: 16px;
       margin-bottom: 10px;
       color: #000;
     }
-    .item{
+
+    .item {
       margin-top: 10px;
       font-size: 14px;
-      span{
+
+      span {
         margin-right: 20px;
       }
     }
-    footer{
+
+    footer {
       background-color: #eaeaea;
       position: fixed;
       bottom: 0;
-      width: 90%; /*写给不支持calc()的浏览器*/
+      width: 90%;
+      /*写给不支持calc()的浏览器*/
       width: -moz-calc(100% - (10px + 5px) * 2);
       width: -webkit-calc(100% - (10px + 5px) * 2);
       width: calc(100% - (10px + 5px) * 2);

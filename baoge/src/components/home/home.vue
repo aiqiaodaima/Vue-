@@ -79,9 +79,9 @@
       return {
         shift: "movies",
         images: [
-          "https://yd.imuts.cn/images/banner01.jpg",
-          "https://yd.imuts.cn/images/banner02.jpg",
-          "https://yd.imuts.cn/images/banner03.jpg"
+          require( '../../assets/banner01.jpg'),
+          require('../../assets/banner02.jpg'),
+          require('../../assets/banner03.jpg')
         ]
       };
     },

@@ -19,7 +19,7 @@
         <span>{{item.chamber}}</span>
       </div>
       <div class="item">
-         <el-button style="float: right; padding: 13px 5px" type="text"  @click="selectConById(item.id)">{{item.statu}}</el-button>
+         <el-button style="float: right; padding: 13px 5px" type="text"  @click="selectConById(item.id)">{{item.status}}</el-button>
       </div>
     </el-card>
     <!-- 底部 -->
@@ -97,36 +97,9 @@
           .then(res => res.customPage)
           .then(res => {
             this.arrLX = res.rows;
-            this.arrLX.map((item)=>{item.status = $statuChange(item.status)})
+            this.arrLX.map((item)=>{item.status = this.statusObj[(item.status)]})
             this.total = res.records;
           });
-          let $statuChange = (e, id) => {
-              if (e == 1) {
-                return '待医院审核'
-              } else if (e == 2) {
-                return '等待接收'
-              } else if (e == 3) {
-                if (id == 'doc') {
-                  return '待医生接收'
-                } else {
-                  return '待专家接收'
-                }
-              } else if (e == 4) {
-                return '已接收'
-              } else if (e == 5) {
-                return '已就诊'
-              } else if (e == 6) {
-                return '已住院'
-              } else if (e == 7) {
-                return '未就诊'
-              } else if (e == 8) {
-                return '已撤销'
-              } else if (e == 9) {
-                return '本医院撤销'
-              }
-            }
-
-            // this.info.statu =  $statuChange(this.info.statu)
       },
 
       handleCurrentChange(val) {

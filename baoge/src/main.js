@@ -21,6 +21,11 @@ import Moment from 'moment'
 Vue.prototype.$moment = Moment;
 // oss上传
 import OssApi from '../src/oss'
+// 图片放大
+import preview from 'vue-photo-preview'
+import 'vue-photo-preview/dist/skin.css'
+Vue.use(preview)
+
 //定义全局变量
 console.log(OssApi)
 Vue.prototype.$OssApi = OssApi.uploadRequest
