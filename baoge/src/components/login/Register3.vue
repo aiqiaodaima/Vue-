@@ -72,7 +72,7 @@
         dialogImageUrl: "",
         dialogVisible: false,
         ruleForm: {
-          rid: 6,
+          rid: '',
           card: '',
           cardFrontImg: '',
           cardVersoImg: '',
@@ -172,7 +172,13 @@
       }
     },
     mounted() {
-      // console.log(JSON.parse(sessionStorage.sing1) )
+
+      console.log(JSON.parse(sessionStorage.sing2) )
+      if(JSON.parse(sessionStorage.sing2).hospitalId == '10001'){
+        this.ruleForm.rid = "6"
+      }else{
+        this.ruleForm.rid = "7"
+      }
     }
   };
 

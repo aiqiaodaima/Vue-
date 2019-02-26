@@ -5,7 +5,6 @@ import {
 } from 'element-ui';
 
 axios.defaults.timeout = 50000;
-// axios.defaults.baseURL = 'http://192.168.1.150:1002';
 if (process.env.NODE_ENV == 'development') {
   axios.defaults.baseURL = 'http://192.168.1.150:1002';
   // axios.defaults.baseURL = 'https://yd.imuts.cn'

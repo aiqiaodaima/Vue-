@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span style="font-size:14px;">当前状态</span>
-        <el-button style="float: right; padding: 3px 0" type="text">{{info.statu}}</el-button>
+        <el-button style="float: right; padding: 3px 0" type="text">{{info.status}}</el-button>
       </div>
       <van-cell-group>
         <van-cell title="患者姓名" :value="info.patientName" />
@@ -56,7 +56,16 @@
     data() {
       return {
         info: {},
-        imgList:[]
+        imgList:[],
+         statusObj: {
+          10: '待医院审核',
+          20: '待分配专家',
+          30: '待专家接收',
+          40: '已接收',
+          50: '本医院撤销',
+          60: '上级医院撤销',
+          70: '会诊已结束'
+        },
       }
     },
     methods: {
@@ -95,32 +104,7 @@
               }
             }
             this.info.planTime ? this.info.planTime = this.$moment(this.info.planTime).format("YYYY-MM-DD") : '';
-            let $statuChange = (e, id) => {
-              if (e == 1) {
-                return '待医院审核'
-              } else if (e == 2) {
-                return '等待接收'
-              } else if (e == 3) {
-                if (id == 'doc') {
-                  return '待医生接收'
-                } else {
-                  return '待专家接收'
-                }
-              } else if (e == 4) {
-                return '已接收'
-              } else if (e == 5) {
-                return '已就诊'
-              } else if (e == 6) {
-                return '已住院'
-              } else if (e == 7) {
-                return '未就诊'
-              } else if (e == 8) {
-                return '已撤销'
-              } else if (e == 9) {
-                return '本医院撤销'
-              }
-            }
-            this.info.statu =  $statuChange(this.info.statu)
+            this.info.status = this.statusObj[(this.info.status)]
 
           })
           .then(res => {

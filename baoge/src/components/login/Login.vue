@@ -110,8 +110,7 @@ export default {
               if(res.msg == '1'){
                 this.$router.push({ path: "/home" });
                 sessionStorage.setItem("user",JSON.stringify(res.user))
-              }
-              else{
+              }else{
                 this.$message.error(this.errorInfos[res.msg] || '系统异常');
                 this.loading = false;
               }

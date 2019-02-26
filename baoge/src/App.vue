@@ -27,7 +27,7 @@ body {
   padding: 0;
   background-size: cover;
   position: relative;
-  width: 100vw;
+  /* width: 100vw; */
   height: 100vh;
 }
 #app {

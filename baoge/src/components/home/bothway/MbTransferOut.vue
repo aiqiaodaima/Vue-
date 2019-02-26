@@ -75,7 +75,7 @@
                 return '本医院撤销'
               }
             }
-        this.$post('case/selectCasePage?pageSize=5&type=A&pageNo=' + this.pageNo +
+        this.$post('case/selectCasePage?pageSize=5&type=B&pageNo=' + this.pageNo +
             '&applyUserId=' + this.applyUserId +
             '&startTime=' + this.startTime +
             '&endTime=' + this.endTime +

@@ -2,7 +2,7 @@
   <div class="contain">
     <mu-appbar style="width: 100%;" color="primary">
       登陆手机
-      <mu-button flat slot="right">15918727869</mu-button>
+      <mu-button flat slot="right">{{phone}}</mu-button>
     </mu-appbar>
     <!-- <mu-container>
       <mu-text-field v-model="username" label="请输入您的原始密码" label-float help-text=""></mu-text-field><br />
@@ -32,6 +32,7 @@
   export default {
     data() {
       var str = /^[A-Za-z]+[0-9]+[A-Za-z0-9]*|[0-9]+[A-Za-z]+[A-Za-z0-9]*$/g;
+      let user = JSON.parse(sessionStorage.user)
       var validatePass1 = (rule, value, callback) => {
         if (value === "") {
           callback(new Error("请输入旧密码"));
@@ -132,7 +133,8 @@
               trigger: "blur"
             }
           ]
-        }
+        },
+        phone: user.contactPhone
       };
     },
     methods: {

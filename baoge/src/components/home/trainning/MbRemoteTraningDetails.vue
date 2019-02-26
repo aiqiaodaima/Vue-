@@ -1,15 +1,15 @@
 <template>
   <div>
     <div class="chair-container" id="wrap">
-      <el-card class="box-card" style="padding: 10px 0;">
+      <el-card class="box-card" style="padding: 0 0 10px;">
         <div class="row fixed">
-          <div>
+          <div style="width:100%">
             <dl id="training">
               <dt>
-                <h4 style="width:100%;background:#333;color:#fff;line-height:50px;font-size:18px;text-align:center;">{{title}}</h4>
+                <div style="width:100%;background:#333;color:#fff;line-height:50px;font-size:18px;text-align:center;">{{title}}</div>
               </dt>
               <dd style="position: relative;">
-                <video id="remotetraining_video" class="video-js vjs-big-play-centered" style="width:90%;height: 200px;background-color: #000;"
+                <video id="remotetraining_video" class="video-js vjs-big-play-centered" style="width:100%;height: 200px;background-color: #000;"
                   ref='video' controls="true" controlslist="nodownload">
                   <p class="vjs-no-js">
                     要查看此视频，请启用JavaScript，并考虑将其升级到web浏览器
@@ -74,7 +74,7 @@
         valueFlower: 0,
         sumFlower: 0,
         flower: 0,
-        giveId: "",
+        giveId: JSON.parse(sessionStorage.user).id,
         isSent: false,
         msg: [],
         placeholder: '请发表你的想法',
@@ -120,12 +120,12 @@
             pageNo: this.pageNo
           })
           .then(res => {
-              this.total = res.customPage.records
-              if (res.customPage.rows.length > 0) {
-                this.msg = res.customPage.rows.map(item => {
-                  item.createTime = this.$moment(item.createTime).format("YYYY-MM-DD");
-                  return item
-                })
+            this.total = res.customPage.records
+            if (res.customPage.rows.length > 0) {
+              this.msg = res.customPage.rows.map(item => {
+                item.createTime = this.$moment(item.createTime).format("YYYY-MM-DD");
+                return item
+              })
             }
           })
       },
@@ -147,21 +147,18 @@
             flowerNum: this.flower
           })
           .then(res => {
-            if (res.status == 200) {
-              console.log(res)
-              if (res.data.msg == "1") {
-                this.$message({
-                  message: '恭喜您，送花成功',
-                  type: 'success'
-                });
-                this.isSent = true;
-                this.showTotalFlowe()
-              } else if (res.data.msg == "5") {
-                this.$message({
-                  message: '您已经送过了',
-                  type: 'warning'
-                });
-              }
+            if (res.msg == "1") {
+              this.$message({
+                message: '恭喜您，送花成功',
+                type: 'success'
+              });
+              this.isSent = true;
+              this.showTotalFlowe()
+            } else if (res.msg == "5") {
+              this.$message({
+                message: '您已经送过花了',
+                type: 'warning'
+              });
             }
           })
       },
@@ -171,16 +168,16 @@
             giveId: this.giveId,
           })
           .then(res => {
-            if (res.status == 200) {
-              console.log(res)
-              if (res.data.myFlower == "0") {
+
+
+              if (res.myFlower == "0") {
                 this.isSent = false;
                 this.valueFlower = 0
               } else {
-                this.valueFlower = res.data.myFlower || 0
+                this.valueFlower = res.myFlower || 0
                 this.isSent = true
               }
-            }
+
           })
       },
       showTotalFlowe() {
@@ -188,10 +185,7 @@
             trainingId: this.$route.query.id
           })
           .then(res => {
-            if (res.status == 200) {
-              console.log(res)
-              this.sumFlower = res.data.sumFlower || 0
-            }
+            this.sumFlower = res.sumFlower || 0
           })
       }
     },
@@ -207,14 +201,15 @@
 </script>
 
 <style scoped>
-/* 备用图标 */
-    [class^="my_icon"], [class*="my_icon"] {
-      font-family:"iconfont" !important;
-      font-size:16px;
-      font-style:normal;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
+  /* 备用图标 */
+  [class^="my_icon"],
+  [class*="my_icon"] {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
   .grade {
     margin: 0 auto;
@@ -229,7 +224,7 @@
   }
 
   .grade /deep/ .my_icon-my_flower2:before {
-    font-family:"iconfont" !important;
+    font-family: "iconfont" !important;
     font-size: 24px !important;
     font-style: normal;
   }
