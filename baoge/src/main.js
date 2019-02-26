@@ -9,12 +9,12 @@ import 'lib-flexible/flexible.js'
 import routers from './router/index'
 // import Vue from 'vue';
 // import 'vant/lib/icon/local.css';
+//  用的两个框架
 import Vant from 'vant';
 import 'vant/lib/index.css';
 import MuseUI from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
 // axios
-import axios from 'axios'
 import {post,fetch,patch,put} from './http'
 // 日期
 import Moment from 'moment'

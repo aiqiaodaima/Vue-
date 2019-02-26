@@ -1,6 +1,6 @@
 <template>
   <el-card class="app_content">
-    <iframe :src="'./static/pdf/web/viewer.html?file=' + url" frameborder="0"></iframe>
+    <!-- <iframe :src="'./static/pdf/web/viewer.html?file=' + url" frameborder="0"></iframe> -->
 
     <center>
       <el-button type="primary" size="medium" @click="goBack()">返回</el-button>
