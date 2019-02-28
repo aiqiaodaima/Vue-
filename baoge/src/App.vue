@@ -14,6 +14,7 @@ export default {
       title: "这是title"
     };
   }
+  // 备注
   // components: {
   //   "app-Login2": Login2
   // }
